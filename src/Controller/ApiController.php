@@ -2,22 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\Phone;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController
 {
     /**
      * @Route("/api", name="api")
      */
-    public function index()
+    public function index(SerializerInterface $serializer)
     {
-        $data = [
-            'name' => 'iPhone X',
-            'price' => 1000
-        ];
+        $phone = new phone();
+        $phone->setName('iPhone XS')
+              ->setColor('black')
+              ->setMemory('32')
+              ->setPrice('600')
+              ->setDescription('tres bon telephone');
 
-        return new JsonResponse($data);
+        $data =$serializer->serialize($phone,'json');
+
+        //return $this->json($data);
+
+        return new Response($data, 200,[
+            'Content-Type'=>'application/json'
+        ]);
     }
 }
