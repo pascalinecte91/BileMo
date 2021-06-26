@@ -14,21 +14,26 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * 
+     * @Groups(groups={"phone:list", "bphone:show"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $color;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * 
      */
     private $memory;
 
@@ -39,6 +44,7 @@ class Phone
 
     /**
      * @ORM\Column(type="string", length=355)
+     * 
      */
     private $description;
 
@@ -94,8 +100,6 @@ class Phone
 
         return $this;
     }
-
-    
 
     public function getDescription(): ?string
     {

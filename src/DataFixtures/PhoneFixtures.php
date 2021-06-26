@@ -5,37 +5,7 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Phone;
-use Faker;
-use NumberFormatter;
 
-/*
-class PhoneFixtures extends Fixture
-{
-
-    public function load(ObjectManager $manager)
-    {
-        $faker = Faker\Factory::create('fr_FR');
-
-        $listPhone = ['iphone','samsung','huawei','xioami','lg'],
-        $listPhoneColor = ['white','black','gold','red','blue'];
-          
-        ];
-        for ($i = 1; $i <= 30; $i++) {
-            $phone = new Phone();
-
-            $listPhone->setName($this->names[random_int(1, 10)])
-                ->setColor($this->colors[random_int(0, 4)])
-                ->setMemory($faker->randomDigit(3))
-                ->setPrice($faker->randomElement(3, 4))
-                ->setDescription($faker->realText());
-            //insert en db
-            $manager->persist($phone);
-        }
-
-            $manager->flush();
-    }
-}
-*/
 
 class PhoneFixtures extends Fixture
 {
