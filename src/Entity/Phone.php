@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PhoneRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,7 +16,6 @@ class Phone
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-     * @Groups(groups={"phone:list", "bphone:show"})
      */
     private $id;
 
