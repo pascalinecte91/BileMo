@@ -3,8 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Phone;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 
 /**
  * @method Phone|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,33 +22,30 @@ class PhoneRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Phone::class);
     }
-
-    // /**
-    //  * @return Phone[] Returns an array of Phone objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    //2 parametres, 2 valeurs dans la methode soit la page  et maximum 7 per page
+    public function findAllPhones($page, $max)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        if (!is_numeric($page)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $page est incorrecte (valeur : ' . $page . ').'
+            );
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Phone
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($page < 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas');
+        }
+
+        if (!is_numeric($max)) {
+            throw new InvalidArgumentException(
+                'La valeur de l\'argument $max est incorrecte (valeur : ' . $max . ').'
+            );
+        }
+        $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
+            
+            ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
+            ->setMaxResults($max)  //  tu m'affectes 7 requetes tel max
+            ->getQuery();                  // obtient  la page
+
+        return new Paginator($query);
     }
-    */
 }

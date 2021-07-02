@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
@@ -15,36 +17,41 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * 
+     * @Groups({"list", "show"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     * @Groups({"list", "show"})
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
+     * @Assert\Length(min="2", minMessage="Ce champ doit contenir un minimum de {{ max }}caractères", max="255",maxMessage="Ce champ doit contenir un maximum de {{ max }} caractères")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     * @Groups({"show"})
      */
     private $color;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     * @Groups({"show"})
      */
     private $memory;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"list", "show"})
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
+     * @Assert\Range(min="1", minMessage="La somme minimum acceptée est {{ min }}euros", max="1500",maxMessage="La valeur maximum autorisée est {{ min }} euros")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=355)
-     * 
+     * @Groups({"show"})
      */
     private $description;
 
