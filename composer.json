@@ -14,7 +14,6 @@
         "doctrine/orm": "^2.9",
         "fzaninotto/faker": "^1.9",
         "lexik/jwt-authentication-bundle": "^2.12",
-        "nelmio/api-doc-bundle": "^4.3",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "spomky-labs/lexik-jose-bridge": "^3.0",
