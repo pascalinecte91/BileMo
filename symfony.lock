@@ -133,6 +133,15 @@
     "namshi/jose": {
         "version": "7.2.3"
     },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        }
+    },
     "nikic/php-parser": {
         "version": "v4.10.5"
     },
@@ -189,6 +198,9 @@
             "version": "2.0",
             "ref": "db8bcdca64743ea7413cf9f40cd9c29786401136"
         }
+    },
+    "symfony/asset": {
+        "version": "v5.3.2"
     },
     "symfony/cache": {
         "version": "v5.3.0"
@@ -474,5 +486,8 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
+    },
+    "zircote/swagger-php": {
+        "version": "3.2.3"
     }
 }
