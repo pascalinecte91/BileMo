@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -21,19 +22,33 @@ class UserFixtures extends Fixture
     }
     public function load(ObjectManager $manager)
     {
+       /* $faker = Factory::create('fr-FR');
+
+
+        for($u =  0; $u < 10; $u++){
         $user = new User();
-        $user
-            ->setEmail('pascaline@gmail.com')
+        $user->setEmail($faker->email())
+            ->setUsername($faker->firstName())
+            ->setPassword(
+                $this->userPasswordHasher->hashPassword(
+                    $user,'azerty'));*/
+        $user = new User();
+        $user->setEmail('pascaline@gmail.com')
             ->setUsername('toto')
             ->setPassword(
                 $this->userPasswordHasher->hashPassword(
                     $user,
-                    'azerty'
-                )
-            );
+                    'azerty'));
 
         $manager->persist($user);
 
+        //$this->addReference('user_' . $u, $user);
+    
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

@@ -26,23 +26,23 @@ class PhoneController extends AbstractController
     /**
      *@Route("",  name="phone_index", methods={"GET"})
      */
-    public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer): Response
+    public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
 
         $page = $request->query->get('page');
         if (is_null($page) || $page < 1) {
             $page = 1;
-        }
-
+        
+        
         $phones = $phoneRepository->findAllPhones($page, 5);
-        //$data = $serializer->serialize($phones,'json');
-
-        return $this->json($phones, Response::HTTP_OK, [
-            'groups' => ['list']
+        $json = $serializer->serialize($phones,'json', ['groups' => 'list']);
+        dd($phones);
+        $response = new Response($json, 200, [
+            "content-type" => "application/json"
         ]);
-        /*return new Response($data, 200, [
-            'Content-Type' => 'application/json'
-        ]);*/
+        return $response;
+    }
+
 }
 
 
