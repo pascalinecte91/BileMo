@@ -13,11 +13,6 @@ class ApiController extends AbstractController
      */
     public function index()
     {
-        $data = [
-            'name' => 'iPhone X',
-            'price' => 1000
-        ];
 
-        return new JsonResponse($data);
     }
 }

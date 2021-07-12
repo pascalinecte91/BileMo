@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -20,12 +23,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
-     */
-    private $username;
 
     /**
      * @ORM\Column(type="json")
@@ -44,12 +41,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $email;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $customers;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
-     * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
+     * @ORM\Column(type="string", length=255)
      */
-    private $customer;
+    private $name;
+
+    public function __construct()
+    {
+        $this->customers = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -61,15 +67,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
-    }
+ 
 
     /**
      * A visual identifier that represents this user.
@@ -78,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
     /**
@@ -147,14 +147,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-       public function getCustomer(): ?Customer
+    /**
+     * @return Collection|Customer[]
+     */
+    public function getCustomers(): Collection
     {
-        return $this->customer;
+        return $this->customers;
     }
 
-    public function setCustomer(?Customer $customer): self
+    public function addCustomer(Customer $customer): self
     {
-        $this->customer = $customer;
+        if (!$this->customers->contains($customer)) {
+            $this->customers[] = $customer;
+            $customer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomer(Customer $customer): self
+    {
+        if ($this->customers->removeElement($customer)) {
+            // set the owning side to null (unless already changed)
+            if ($customer->getUser() === $this) {
+                $customer->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

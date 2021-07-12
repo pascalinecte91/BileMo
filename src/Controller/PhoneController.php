@@ -15,6 +15,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+
 
 
 /**
@@ -23,9 +27,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  */
 class PhoneController extends AbstractController
 {
-    /**
-     *@Route("",  name="phone_index", methods={"GET"})
-     */
+    /*
+    *@Route("",  name="phone_index", methods={"GET"})
+    @Route("/api/{phone}", methods={"GET"})
+    *@SWG\Response(
+    *     response=200,
+    *     @Model(type=User::class)
+    * )
+    */
     public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
 
@@ -36,7 +45,7 @@ class PhoneController extends AbstractController
         
         $phones = $phoneRepository->findAllPhones($page, 5);
         $json = $serializer->serialize($phones,'json', ['groups' => 'list']);
-        dd($phones);
+    
         $response = new Response($json, 200, [
             "content-type" => "application/json"
         ]);
@@ -47,8 +56,9 @@ class PhoneController extends AbstractController
 
 
     /**
-     * @Route("", name="phone_new", methods={"POST"})
-     */
+     * @Route("/new", name="phone_new", methods={"POST"})
+          */
+    
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $phone = new Phone();
@@ -83,7 +93,7 @@ class PhoneController extends AbstractController
 
     /**
      * @Route("/edit/{id}", name="phone_edit", methods={"PUT"})
-     */
+         */
     public function edit(Request $request, Phone $phone): Response
     {
 
@@ -118,7 +128,7 @@ class PhoneController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="update_phone", methods={"PUT"})
+     * @Route("/update/{id}", name="update_phone", methods={"PUT"})
      */
     public function update(Request $request, SerializerInterface $serializer, Phone $phone, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {

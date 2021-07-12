@@ -2,51 +2,55 @@
 
 namespace App\DataFixtures;
 
-use Faker\Factory;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Faker\Factory;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture 
 {
 
-     /**
+    /**
      * @var UserPasswordHasherInterface
      */
     private $userPasswordHasher;
+
+    private $namesU = ['orange', 'sfr', 'bouygues', 'free', 'virgin'];
+
 
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
     }
+
     public function load(ObjectManager $manager)
     {
-       /* $faker = Factory::create('fr-FR');
+        $faker = Factory::create('fr-FR');
 
-
-        for($u =  0; $u < 10; $u++){
-        $user = new User();
-        $user->setEmail($faker->email())
-            ->setUsername($faker->firstName())
-            ->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,'azerty'));*/
         $user = new User();
         $user->setEmail('pascaline@gmail.com')
-            ->setUsername('toto')
+            ->setName('toto')
             ->setPassword(
                 $this->userPasswordHasher->hashPassword(
                     $user,
-                    'azerty'));
-
+                    'azerty'
+                )
+            );
         $manager->persist($user);
 
-        //$this->addReference('user_' . $u, $user);
-    
+        for ($u =  0; $u <= 4; $u++) {
+            $user = new User();
+            $user->setName($this->namesU[$u])
+                ->setEmail($faker->email())
+                ->setPassword($this->userPasswordHasher->hashPassword($user, 'azerty'));
+
+            $manager->persist($user);
+            $this->addReference('user_' . $u, $user);
+        }
         $manager->flush();
     }
-
     public function getOrder()
     {
         return 1;

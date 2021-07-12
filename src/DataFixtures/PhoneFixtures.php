@@ -5,11 +5,9 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Phone;
-use Faker;
 
 
-
-class PhoneFixtures extends Fixture
+class PhoneFixtures extends Fixture 
 {
     private $names = ['i XL240', 's PrimeGalaxy 9', 's Prime Galaxy 11', 'h-p30 lite', 'x redmi Note10', 'x Mi 11 lites', ' g7 ThinQ', ' Qstylus', 'h-p20 dual_sim'];
     private $colors = ['white', 'black', 'gold', 'red', 'blue', 'silver', 'violet'];
@@ -26,19 +24,17 @@ class PhoneFixtures extends Fixture
     ];
 
 
-
     public function load(ObjectManager $manager)
     {
+    
 
-        $faker = Faker\Factory::create('fr_FR');
-
-        for($i = 1; $i <= 40; $i++) {
+        for ($i = 1; $i <= 40; $i++) {
             $phone = new Phone();
             $phone->setName($this->names[rand(0,8)]);
-            $phone->setColor($this->colors[rand(0,6)]);
+            $phone->setColor($this->colors[$i]);
             $phone->setPrice(rand(500, 1500));
-            $phone->setMemory($this->memorys[rand(0,4)]);
-            $phone->setDescription($this->descriptions[rand(0,6)]);
+            $phone->setMemory($this->memorys[$i]);
+            $phone->setDescription($this->descriptions[rand(0, 6)]);
 
             $manager->persist($phone);
         }
@@ -47,6 +43,6 @@ class PhoneFixtures extends Fixture
     }
     public function getOrder()
     {
-        return 3;
+        return 2;
     }
 }

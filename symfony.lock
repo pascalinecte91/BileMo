@@ -109,6 +109,12 @@
     "fzaninotto/faker": {
         "version": "v1.9.2"
     },
+    "jms/metadata": {
+        "version": "2.5.0"
+    },
+    "jms/serializer": {
+        "version": "3.13.0"
+    },
     "laminas/laminas-code": {
         "version": "4.4.0"
     },
@@ -153,6 +159,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.5.5"
     },
     "psr/cache": {
         "version": "1.0.1"

@@ -12,6 +12,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 
 /**
@@ -39,7 +42,7 @@ class UserController extends AbstractController
     public function newUser(Request $request)
     {
         $user = new User();
-        $user->setUsername($request->get('username'))
+        $user->setname($request->get('username'))
             ->setPassword('password')
             ->setEmail($request->get('password'));
             $this->manager->persist( $user );
