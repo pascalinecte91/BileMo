@@ -31,9 +31,9 @@ class PhoneFixtures extends Fixture
         for ($i = 1; $i <= 40; $i++) {
             $phone = new Phone();
             $phone->setName($this->names[rand(0,8)]);
-            $phone->setColor($this->colors[$i]);
+            $phone->setColor($this->colors[$i %7]);
             $phone->setPrice(rand(500, 1500));
-            $phone->setMemory($this->memorys[$i]);
+            $phone->setMemory($this->memorys[$i %5]);
             $phone->setDescription($this->descriptions[rand(0, 6)]);
 
             $manager->persist($phone);

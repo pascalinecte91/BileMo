@@ -12,8 +12,10 @@
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
+        "friendsofsymfony/rest-bundle": "^3.0",
         "fzaninotto/faker": "^1.9",
         "jms/serializer": "^3.13",
+        "jms/serializer-bundle": "^3.9",
         "lexik/jwt-authentication-bundle": "^2.12",
         "nelmio/api-doc-bundle": "^4.3",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -36,7 +38,8 @@
         "symfony/twig-bundle": "5.3.*",
         "symfony/validator": "5.3.*",
         "symfony/web-profiler-bundle": "5.3.*",
-        "symfony/yaml": "5.3.*"
+        "symfony/yaml": "5.3.*",
+        "zircote/swagger-php": "^3.2"
     },
     "config": {
         "optimize-autoloader": true,

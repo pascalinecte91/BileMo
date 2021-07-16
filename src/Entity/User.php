@@ -4,13 +4,15 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,11 +23,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list", "show"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"show"})
      */
     private $roles = [];
 
@@ -38,16 +42,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"list", "show"})
      */
     private $email;
 
     /**
      * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="user", orphanRemoval=true)
+     * 
      */
     private $customers;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @OA\Property(type="string", maxLength=255)
+     * @Groups({"list", "show"})
      */
     private $name;
 

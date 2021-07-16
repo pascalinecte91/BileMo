@@ -1,7 +1,22 @@
 # config/packages/nelmio_api_doc.yaml
 nelmio_api_doc:
-    areas:
-        path_patterns: # an array of regexps
-            - ^/api(?!/doc$)
-        host_patterns:
-            - ^api\.
+  areas:
+    path_patterns: # an array of regexps
+      - ^/api(?!/doc$)
+
+  documentation:
+    servers:
+      - url: http://api.bileMo.com
+        description: API over HTTP
+    info:
+      title: My App
+      description: This is an awesome app!
+      version: 1.0.0
+    components:
+      securitySchemes:
+        Bearer:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
+    security:
+      - Bearer: []

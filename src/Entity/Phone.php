@@ -33,7 +33,7 @@ class Phone
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"show"})
+     * @Groups({"list","show"})
      */
     private $color;
 

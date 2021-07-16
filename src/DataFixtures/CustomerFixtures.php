@@ -18,7 +18,7 @@ class CustomerFixtures extends Fixture  implements OrderedFixtureInterface
 
         for ($i =  0; $i <= 10; $i++) {
             $customer = new Customer();
-            $customer->setName($faker->company())
+            $customer->setName($faker->lastName())
                     ->setEmail($faker->email());
             $manager->persist($customer);
             

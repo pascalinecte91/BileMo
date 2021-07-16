@@ -1,9 +1,8 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-
-login_check:
-    path: /login_check
+# config/routes.yaml
+#app.swagger:
+#    path: /api/doc.json
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }
     
 # config/routes.yaml
 app.swagger_ui:
@@ -11,8 +10,8 @@ app.swagger_ui:
     methods: GET
     defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
-# config/routes.yaml
-app.swagger:
-    path: /api/doc.json
-    methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger }
+# To expose them as JSON
+#app.swagger.areas:
+#    path: /api/doc/{area}.json
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }
