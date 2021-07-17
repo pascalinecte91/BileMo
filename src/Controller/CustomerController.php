@@ -16,12 +16,23 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Hateoas\Configuration\Annotation as Hateoas;
+use Swagger\Annotations as SWG;
 
 use Symfony\Component\Serializer\SerializerInterface;
 
 
 /**
  * @Route("/api/customer")
+ * @OA\Tag(name="Users/customers ")
+ *      @OA\Response(
+ *      response="403",
+ *      description="FORBIDDEN acces non autorisé",
+ * )
+ *      @OA\Response(
+ *      response="404",
+ *      description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+ * )
  * 
  */
 class CustomerController extends AbstractController
@@ -38,6 +49,15 @@ class CustomerController extends AbstractController
 
     /**
     * @Route("", name="customer_list", methods={"GET"})
+     *@OA\Parameter(name="page", in="query", @OA\Schema(type="integer"))
+     *@OA\Response(
+     *     response="200",
+     *     description="Liste",
+     *     @OA\Schema(
+     *         type="array",
+     *         @OA\Items(ref=@Model(type=Customer::class))
+     *     )
+     * )
     */
 
      
@@ -59,8 +79,12 @@ class CustomerController extends AbstractController
 
 
     /**
-    *@Route("/show/{id}", name="customer", methods={"GET"})
+    * @Route("/show/{id}", name="customer", methods={"GET"})
     * @ParamConverter("customer", class="App:Customer")
+    *      @OA\Response(
+    *      response="200",
+    *      description="suppression ok",
+    * )
     */
     public function show(Customer $customer, CustomerRepository $customerRepository, SerializerInterface $serializer ): Response
     {
@@ -73,6 +97,10 @@ class CustomerController extends AbstractController
 
      /**
      * @Route("/new", name="customer_new", methods={"POST"})
+     *      @OA\Response(
+     *      response="200",
+     *      description="suppression ok",
+     * )
      */
     public function newCustomer(Request $request, EntityManagerInterface $entityManager)
     {
@@ -86,6 +114,10 @@ class CustomerController extends AbstractController
 
        /**
      * @Route("/{id}", name="customer_delete", methods={"DELETE"})
+     *      @OA\Response(
+     *      response="200",
+     *      description="suppression ok",
+     * )
      */
     public function deleteCustomer(Customer $customer, EntityManagerInterface $entityManager)
     {
