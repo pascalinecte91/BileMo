@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
-use App\Form\PhoneType;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -40,11 +39,12 @@ class PhoneController extends AbstractController
     /**
      *@Route("",  name="phone_index", methods={"GET"})
      *   @OA\Response(
-     *     response="200",
-     *     description="Liste",
-     *     @OA\Schema(
-     *         type="array",
-     *         @OA\Items(ref=@Model(type=Phone::class))
+     *      response="200",
+     *      description="Liste",
+     *   @OA\Schema(
+     *      type="array",
+     *   @OA\Items(
+     *      ref=@Model(type=Phone::class))
      *     )
      * )
      */
@@ -55,25 +55,27 @@ class PhoneController extends AbstractController
         $page = $request->query->get('page');
         if (is_null($page) || $page < 1) {
             $page = 1;
-
+        }
             $phones = $phoneRepository->findAllPhones($page, 5);
-           
+        
             $json = $serializer->serialize($phones, 'json', ['groups' => 'list']);
             $response = new Response($json, 200, [
                 "content-type" => "application/json"
             ]);
             return $response;
-        }
+            
+        
     }
 
     /**
      * @Route("/show/{id}", name="show_phone", methods={"GET"})
      * @ParamConverter("phone", class="App:Phone")
-     * @OA\Parameter(name="page", in="query", @OA\Schema(type="integer"))
-     * @Cache(expires="+5 minutes")
-     *    @OA\Response(
-     *    response="200",
-     *    description="Returns Phone"
+     *     @OA\Parameter(name="page", in="query", 
+     *     @OA\Schema(type="integer"))
+     *     @Cache(expires="+5 minutes")
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Phone"
      *) 
      */
     public function show(Phone $phone): Response

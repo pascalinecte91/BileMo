@@ -11,7 +11,7 @@ app.swagger_ui:
     defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
 # To expose them as JSON
-app.swagger.areas:
-    path: /api/doc/{area}.json
-    methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger }
+#app.swagger.areas:
+#    path: /api/doc/{area}.json
+#   methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }

@@ -1,7 +1,4 @@
 {
-    "brick/math": {
-        "version": "0.9.2"
-    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
@@ -100,23 +97,8 @@
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
-    "fgrosse/phpasn1": {
-        "version": "v2.3.0"
-    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
-    },
-    "friendsofsymfony/rest-bundle": {
-        "version": "2.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.2",
-            "ref": "fa845143b7e0a4c70aedd1a88c549e6d977e9ae5"
-        },
-        "files": [
-            "./config/packages/fos_rest.yaml"
-        ]
     },
     "fzaninotto/faker": {
         "version": "v1.9.2"
@@ -198,15 +180,6 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
-    "psr/http-client": {
-        "version": "1.0.1"
-    },
-    "psr/http-factory": {
-        "version": "1.0.1"
-    },
-    "psr/http-message": {
-        "version": "1.0.1"
-    },
     "psr/log": {
         "version": "1.1.4"
     },
@@ -221,18 +194,6 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
-    },
-    "spomky-labs/base64url": {
-        "version": "v2.0.4"
-    },
-    "spomky-labs/lexik-jose-bridge": {
-        "version": "2.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.0",
-            "ref": "db8bcdca64743ea7413cf9f40cd9c29786401136"
-        }
     },
     "symfony/asset": {
         "version": "v5.3.2"
@@ -495,32 +456,8 @@
     "symfony/yaml": {
         "version": "v5.3.2"
     },
-    "thecodingmachine/safe": {
-        "version": "v1.3.3"
-    },
     "twig/twig": {
         "version": "v3.3.2"
-    },
-    "web-token/jwt-bundle": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-checker": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-core": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-encryption": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-key-mgmt": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-signature": {
-        "version": "v2.2.10"
-    },
-    "web-token/jwt-signature-algorithm-rsa": {
-        "version": "v2.2.10"
     },
     "webmozart/assert": {
         "version": "1.10.0"
@@ -539,12 +476,6 @@
         "files": [
             "./config/packages/bazinga_hateoas.yaml"
         ]
-    },
-    "willdurand/jsonp-callback-validator": {
-        "version": "v1.1.0"
-    },
-    "willdurand/negotiation": {
-        "version": "3.0.0"
     },
     "zircote/swagger-php": {
         "version": "3.2.3"

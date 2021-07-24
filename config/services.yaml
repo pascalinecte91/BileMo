@@ -17,14 +17,17 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-           # - '../src/Entity/'
+            - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
-# config/services.yaml
+
     get_set_method_normalizer:
         class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
         tags: [serializer.normalizer]
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\EventListener\ExceptionListener:
+       tags:
+        - { name: kernel.event_listener, event: kernel.exception }
     
+
+   

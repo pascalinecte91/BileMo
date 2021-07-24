@@ -9,7 +9,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Faker\Factory;
 
-class UserFixtures extends Fixture 
+class UserFixtures extends Fixture
 {
 
     /**

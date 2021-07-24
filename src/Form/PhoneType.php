@@ -16,8 +16,7 @@ class PhoneType extends AbstractType
             ->add('color')
             ->add('memory')
             ->add('price')
-            ->add('description')
-        ;
+            ->add('description');
     }
 
     public function configureOptions(OptionsResolver $resolver)

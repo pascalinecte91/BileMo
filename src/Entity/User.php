@@ -42,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @OA\Property(type="string", maxLength=255)
      * @Groups({"list", "show"})
      */
     private $email;
@@ -196,4 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+   
 }

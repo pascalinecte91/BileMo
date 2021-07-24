@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use App\Entity\Phone;
 
 
-class PhoneFixtures extends Fixture 
+class PhoneFixtures extends Fixture
 {
     private $names = ['i XL240', 's PrimeGalaxy 9', 's Prime Galaxy 11', 'h-p30 lite', 'x redmi Note10', 'x Mi 11 lites', ' g7 ThinQ', ' Qstylus', 'h-p20 dual_sim'];
     private $colors = ['white', 'black', 'gold', 'red', 'blue', 'silver', 'violet'];
@@ -26,14 +26,14 @@ class PhoneFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-    
+
 
         for ($i = 1; $i <= 40; $i++) {
             $phone = new Phone();
-            $phone->setName($this->names[rand(0,8)]);
-            $phone->setColor($this->colors[$i %7]);
+            $phone->setName($this->names[rand(0, 8)]);
+            $phone->setColor($this->colors[$i % 7]);
             $phone->setPrice(rand(500, 1500));
-            $phone->setMemory($this->memorys[$i %5]);
+            $phone->setMemory($this->memorys[$i % 5]);
             $phone->setDescription($this->descriptions[rand(0, 6)]);
 
             $manager->persist($phone);

@@ -1,20 +1,16 @@
 {% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
 
 {% block swagger_initialization %}
-    <script type="text/javascript">
-        window.onload = loadSwaggerUI({
-            defaultModelsExpandDepth: -1,
-            deepLinking: true,
-        });
-    </script>
+	<script type="text/javascript">
+		window.onload = loadSwaggerUI({defaultModelsExpandDepth: -1, deepLinking: true});
+	</script>
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/custom-swagger-styles.css') }}">
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/custom-swagger-styles.css') }}">
 {% endblock stylesheets %}
 {% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('js/custom-request-signer.js') }}"></script>
-{% endblock javascripts %}
-{% endblock %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/custom-request-signer.js') }}"></script>
+{% endblock javascripts %}{% endblock %}

@@ -44,7 +44,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
         }
         $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
-            
+
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
             ->setMaxResults($max)  //  tu m'affectes 7 requetes tel max
             ->getQuery();                  // obtient  la page
@@ -68,7 +68,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @return User[] Returns an array of User objects
      */
-
-  
-
 }

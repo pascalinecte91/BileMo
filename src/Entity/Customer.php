@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+
+
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -25,13 +28,14 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * Groups({"show"})
+     * @Groups({"list","show"})
+     * 
      */
     private $email;
-   
+
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"show"})
+     * @Groups({"list", "show"})
      * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
      */
     private $name;
