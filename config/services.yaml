@@ -21,13 +21,11 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
-    get_set_method_normalizer:
-        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
-        tags: [serializer.normalizer]
+    #get_set_method_normalizer:
+    #    class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+    #    tags: [serializer.normalizer]
+   
 
     App\EventListener\ExceptionListener:
-       tags:
-        - { name: kernel.event_listener, event: kernel.exception }
-    
-
-   
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

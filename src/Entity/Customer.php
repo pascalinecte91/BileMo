@@ -6,6 +6,8 @@ use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,12 +25,14 @@ class Customer
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @OA\Property(description="Identifiant du client")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"list","show"})
+     * @OA\Property(description="Mail du client")
      * 
      */
     private $email;
@@ -37,12 +41,17 @@ class Customer
      * @ORM\Column(type="string", length=255)
      * @Groups({"list", "show"})
      * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
+     * @OA\Property(description="Nom du client")
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
+     * @OA\Property(
+     *     ref = @Model(type=User::class),
+     *     description = "L'utilisateur du client de Bilemo"
+     * )
      */
     private $user;
 

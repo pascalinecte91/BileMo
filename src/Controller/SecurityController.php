@@ -12,7 +12,12 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 use Nelmio\ApiDocBundle\Annotation\Model;
-
+/** 
+* @OA\Response(
+    *     response = 405,
+    *     description = "Méthode interdite"
+    * )
+*/
 class SecurityController extends AbstractController
 {
 
@@ -21,20 +26,47 @@ class SecurityController extends AbstractController
      * @OA\Tag(name="Connexion")
      * @OA\Response(
      *     response=200,
-     *     description="LOGIN",
-     *     @OA\Schema(
-     *         type="array",
-     *         @OA\Items(ref=@Model(type=User::class))
-     *     )
+     *     description="Token authentification avec requete",
+     * )
+     * 
+     * @OA\Response(
+     *     response = 401,
+     *     description = "Informations Invalides"
      * )
      * @OA\Response(
-     *      response="403",
-     *      description="FORBIDDEN acces non autorisé",
+     *     response="403",
+     *     description="FORBIDDEN acces non autorisé",
      * )
-     *      @OA\Response(
-     *      response="404",
-     *      description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+     * @OA\Response(
+     *     response="404",
+     *     description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
      * )
+     * @OA\RequestBody(
+     *     description = "User credentials",
+     *     @OA\MediaType(
+     *         mediaType = "application/json",
+     *      @OA\Schema(
+     *          @OA\Property(
+     *              property = "email",
+     *              description = "The user's email",
+     *              type = "string"
+     *           ),
+     *          @OA\Property(
+     *              property = "password",
+     *              description = "The user's password",
+     *              type = "string",
+     *              format = "password"
+     *           ),
+     *          @OA\Property(
+     *              property = "username",
+     *              description = "user",
+     *              type = "string",
+     *              format = "string"        
+     *         )
+     *     )
+     * )
+     * )
+     * @Security()
      */
     public function loginAction(): Response
     {

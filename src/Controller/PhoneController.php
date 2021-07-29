@@ -27,8 +27,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
  *      description="FORBIDDEN acces non autorisé",
  * )
  *      @OA\Response(
- *      response="404",
- *      description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+ *      response = 405,
+ *      description = "Methode interdite"
  * )
  * 
  */
@@ -40,7 +40,7 @@ class PhoneController extends AbstractController
      *@Route("",  name="phone_index", methods={"GET"})
      *   @OA\Response(
      *      response="200",
-     *      description="Liste",
+     *      description="Liste des téléphones",
      *   @OA\Schema(
      *      type="array",
      *   @OA\Items(
@@ -53,19 +53,19 @@ class PhoneController extends AbstractController
     {
 
         $page = $request->query->get('page');
-        if (is_null($page) || $page < 1) {
-            $page = 1;
+        if (is_null($page)) {
+            $response = "400  argument à mettre";
         }
-            $phones = $phoneRepository->findAllPhones($page, 5);
-        
-            $json = $serializer->serialize($phones, 'json', ['groups' => 'list']);
-            $response = new Response($json, 200, [
-                "content-type" => "application/json"
-            ]);
-            return $response;
-            
-        
+
+        $phones = $phoneRepository->findAllPhones($page, 5);
+
+        $json = $serializer->serialize($phones, 'json', ['groups' => 'list']);
+        $response = new Response($json, 200, [
+            "content-type" => "application/json"
+        ]);
+        return $response;
     }
+
 
     /**
      * @Route("/show/{id}", name="show_phone", methods={"GET"})
@@ -77,7 +77,15 @@ class PhoneController extends AbstractController
      *         response="200",
      *         description="Returns Phone"
      *) 
+      *    @OA\Response(
+     *         response="404",
+     *         description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+     * )
+     * @param Phone|null $phone
+     *
+     * @return Phone
      */
+     
     public function show(Phone $phone): Response
     {
         return $this->json($phone, Response::HTTP_OK, [

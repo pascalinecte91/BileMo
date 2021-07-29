@@ -32,12 +32,21 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @Route("/api/customer")
  * @OA\Tag(name="customers ")
  *      @OA\Response(
+ *      response = 401,
+ *      description = "information incorrects ou token expiré"
+ * )
+ *      @OA\Response(
+ * 
  *      response="403",
  *      description="FORBIDDEN acces non autorisé",
  * )
  *      @OA\Response(
  *      response="404",
  *      description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+ * )
+ * @OA\Response(
+ *     response = 405,
+ *     description = "Methode interdite"
  * )
  * 
  */
@@ -46,10 +55,12 @@ class CustomerController extends AbstractController
     protected $serializer;
     protected $customerRepository;
 
-    public function __construct(SerializerInterface $serializer, CustomerRepository $customerRepository, ValidatorInterface $validator, EntityManagerInterface $manager)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        EntityManagerInterface $manager
+    ) {
         $this->SerializerInterface = $serializer;
-        $this->CustomerRepository = $customerRepository;
         $this->ValidatorInterface = $validator;
         $this->EntityManagerInterface = $manager;
     }
@@ -71,11 +82,11 @@ class CustomerController extends AbstractController
     {
 
         $page = $request->query->get('page');
-        if (is_null($page) || $page <1) {
+        if (is_null($page) || $page < 1) {
             $page = 1;
-           
+
             $customers = $customerRepository->findAllCustomers($page, 7);
-          
+
             $json = $serializer->serialize($customers, 'json', ['groups' => 'list']);
             $response = new Response($json, 200, [
                 "content-type" => "application/json"
@@ -98,7 +109,7 @@ class CustomerController extends AbstractController
      * )
      */
     public function show(Customer $customer): Response
-    
+
     {
         dd($customer);
         return $this->json($customer, Response::HTTP_OK, [
@@ -118,7 +129,7 @@ class CustomerController extends AbstractController
         $customer = new Customer();
         $customer->setName('toto');
         $customer->setEmail('toto@gmail.com');
-    
+
         return $this->json($customer, Response::HTTP_OK, [
             'groups' => ['show', 'list']
         ]);

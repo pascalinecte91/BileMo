@@ -9,6 +9,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use OpenApi\Annotations as OA;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 
 
@@ -22,6 +24,7 @@ class Phone
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"list", "show"})
+     * @OA\Property(description="Identifiant du telephone")
      */
     private $id;
 
@@ -30,18 +33,21 @@ class Phone
      * @Groups({"list", "show"})
      * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
      * @Assert\Length(min="2", minMessage="Ce champ doit contenir un minimum de {{ max }}caractères", max="255",maxMessage="Ce champ doit contenir un maximum de {{ max }} caractères")
+     * @OA\Property(description="Nom du téléphone")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"list","show"})
+     * @OA\Property(description="Couleur du téléphone")
      */
     private $color;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"show"})
+     * @OA\Property(description="Mémoire du téléphone")
      */
     private $memory;
 
@@ -50,12 +56,18 @@ class Phone
      * @Groups({"list", "show"})
      * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
      * @Assert\Range(min="1", minMessage="La somme minimum acceptée est {{ min }}euros", max="1500",maxMessage="La valeur maximum autorisée est {{ min }} euros")
+     * @OA\Property(
+     *      type = "number",
+     *      format = "float",
+     *      description =" Prix du téléphone"
+     * )
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=355)
      * @Groups({"show"})
+     * @OA\Property(description="Informations sur le téléphone")
      */
     private $description;
 

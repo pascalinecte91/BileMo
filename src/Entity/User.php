@@ -24,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"list", "show"})
+     * @OA\Property(description="Identifiant  Unique de l'utilisateur")
      */
     private $id;
 
@@ -44,12 +45,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @OA\Property(type="string", maxLength=255)
      * @Groups({"list", "show"})
+     * @OA\Property(description="Adresse mail du client de bilemo")
      */
     private $email;
 
     /**
      * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="user", orphanRemoval=true)
-     * 
+     * @OA\Property(
+     *     ref = @Model(type=Client::class),
+     *     description = "Utilisateur du client de bilemo"
+     * )
      */
     private $customers;
 
