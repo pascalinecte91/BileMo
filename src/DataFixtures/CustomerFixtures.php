@@ -7,27 +7,30 @@ use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+
 use Faker\Factory;
 
-class CustomerFixtures extends Fixture  implements OrderedFixtureInterface
+class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr-FR');
 
-        for ($i =  0; $i <= 10; $i++) {
+        for ($i =  0; $i <= 50; $i++) {
+            $user= $this->getReference('user_' . ($i%6));
             $customer = new Customer();
             $customer->setName($faker->lastName())
-                ->setEmail($faker->email());
+                ->setEmail($faker->email())
+                ->setUser($user);
             $manager->persist($customer);
         }
         $manager->flush();
     }
+    public function getDependencies (){
+        return [
+            UserFixtures::class
+        ];
 
-    public function getOrder()
-    {
-        return 3;
     }
 }

@@ -44,6 +44,7 @@ class CustomerRepository extends ServiceEntityRepository
 
         throw new EntityNotFoundException("Client introuvable !");
     }*/
+
     public function findAllCustomers($page, $max)
     {
         if (!is_numeric($page)) {
@@ -64,7 +65,7 @@ class CustomerRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
 
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
-            ->setMaxResults($max)  //  tu m'affectes 5 requetes tel max
+            ->setMaxResults($max)  //  tu m'affectes nbre tel max
             ->getQuery();                  // obtient  la page
 
         return new Paginator($query);

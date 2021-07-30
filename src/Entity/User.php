@@ -52,8 +52,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="user", orphanRemoval=true)
      * @OA\Property(
-     *     ref = @Model(type=Client::class),
-     *     description = "Utilisateur du client de bilemo"
      * )
      */
     private $customers;
@@ -83,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
- 
+
 
     /**
      * A visual identifier that represents this user.
@@ -145,8 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+
     }
 
     public function getEmail(): ?string
@@ -202,6 +199,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-   
 }

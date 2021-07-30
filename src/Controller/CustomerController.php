@@ -31,24 +31,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @Route("/api/customer")
  * @OA\Tag(name="customers ")
- *      @OA\Response(
- *      response = 401,
- *      description = "information incorrects ou token expiré"
- * )
- *      @OA\Response(
- * 
- *      response="403",
- *      description="FORBIDDEN acces non autorisé",
- * )
- *      @OA\Response(
- *      response="404",
- *      description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
- * )
- * @OA\Response(
- *     response = 405,
- *     description = "Methode interdite"
- * )
- * 
+ 
  */
 class CustomerController extends AbstractController
 {
@@ -84,15 +67,16 @@ class CustomerController extends AbstractController
         $page = $request->query->get('page');
         if (is_null($page) || $page < 1) {
             $page = 1;
-
-            $customers = $customerRepository->findAllCustomers($page, 7);
-
-            $json = $serializer->serialize($customers, 'json', ['groups' => 'list']);
-            $response = new Response($json, 200, [
-                "content-type" => "application/json"
-            ]);
-            return $response;
         }
+        $customers = $customerRepository->findAllCustomers($page, 6);
+
+        $json = $serializer->serialize($customers, 'json', [
+            'groups' => 'list'
+        ]);
+        $response = new Response($json, 200, [
+            "content-type" => "application/json"
+        ]);
+        return $response;
     }
 
 
@@ -111,7 +95,6 @@ class CustomerController extends AbstractController
     public function show(Customer $customer): Response
 
     {
-        dd($customer);
         return $this->json($customer, Response::HTTP_OK, [
             'groups' => ['show']
         ]);
@@ -124,7 +107,7 @@ class CustomerController extends AbstractController
      *          description="creation ok",
      * )
      */
-    public function newCustomer(Customer $customer, Request $request)
+    public function newCustomer(Customer $customer)
     {
         $customer = new Customer();
         $customer->setName('toto');
@@ -134,8 +117,6 @@ class CustomerController extends AbstractController
             'groups' => ['show', 'list']
         ]);
     }
-
-
 
     /**
      * @Route("/{id}", name="customer_delete", methods={"DELETE"})

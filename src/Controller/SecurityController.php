@@ -12,15 +12,10 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 use Nelmio\ApiDocBundle\Annotation\Model;
-/** 
-* @OA\Response(
-    *     response = 405,
-    *     description = "Méthode interdite"
-    * )
-*/
+
+
 class SecurityController extends AbstractController
 {
-
     /**
      * @Route("/api/login", name="security_login", methods={"POST"})
      * @OA\Tag(name="Connexion")
@@ -28,7 +23,6 @@ class SecurityController extends AbstractController
      *     response=200,
      *     description="Token authentification avec requete",
      * )
-     * 
      * @OA\Response(
      *     response = 401,
      *     description = "Informations Invalides"
@@ -45,24 +39,24 @@ class SecurityController extends AbstractController
      *     description = "User credentials",
      *     @OA\MediaType(
      *         mediaType = "application/json",
-     *      @OA\Schema(
+     *     @OA\Schema(
      *          @OA\Property(
      *              property = "email",
-     *              description = "The user's email",
+     *              description = "Adresse Mail de l'utilisateur",
      *              type = "string"
      *           ),
      *          @OA\Property(
      *              property = "password",
-     *              description = "The user's password",
+     *              description = "Mot de passe de l'utilisateur",
      *              type = "string",
      *              format = "password"
      *           ),
      *          @OA\Property(
      *              property = "username",
-     *              description = "user",
+     *              description = "Nom ",
      *              type = "string",
      *              format = "string"        
-     *         )
+     *          )
      *     )
      * )
      * )

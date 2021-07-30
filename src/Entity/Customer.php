@@ -14,8 +14,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
-
-
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  */

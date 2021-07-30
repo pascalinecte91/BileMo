@@ -10,34 +10,29 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 class ExceptionListener
 {
 
-/**
- * onKernelException function
- *
- * @param ExceptionEvent $event
- * @return void
- */
+    /**
+     * onKernelException function
+     *
+     * @param ExceptionEvent $event
+     * @return void
+     */
 
 
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-        $message = sprintf(
-            'My Error says: %s with code: %s',
-            $exception->getMessage(),
-            $exception->getCode()
-        );
-        // à customiser
+       
         $response = new Response();
-        $response->setContent($message);
+
 
         if ($exception instanceof HttpExceptionInterface) {
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
         } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+            ->setContent(json_encode(['message'=>'Internal error']));
         }
 
-        // sends the modified response object to the event
         $event->setResponse($response);
     }
 }

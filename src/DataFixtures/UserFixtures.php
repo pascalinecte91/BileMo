@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Faker\Factory;
 
 class UserFixtures extends Fixture
@@ -29,6 +28,15 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create('fr-FR');
 
+        for ($u =  0; $u < 5; $u++) {
+            $user = new User();
+            $user->setName($this->namesU[$u])
+                ->setEmail($faker->email())
+                ->setPassword($this->userPasswordHasher->hashPassword($user, 'azerty'));
+
+            $manager->persist($user);
+            $this->addReference('user_' . $u, $user);
+        }
         $user = new User();
         $user->setEmail('pascaline@gmail.com')
             ->setName('toto')
@@ -38,21 +46,10 @@ class UserFixtures extends Fixture
                     'azerty'
                 )
             );
+
         $manager->persist($user);
+        $this->addReference('user_' . $u, $user);
 
-        for ($u =  0; $u <= 4; $u++) {
-            $user = new User();
-            $user->setName($this->namesU[$u])
-                ->setEmail($faker->email())
-                ->setPassword($this->userPasswordHasher->hashPassword($user, 'azerty'));
-
-            $manager->persist($user);
-            $this->addReference('user_' . $u, $user);
-        }
         $manager->flush();
-    }
-    public function getOrder()
-    {
-        return 1;
     }
 }

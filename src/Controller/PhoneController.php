@@ -22,18 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 /**
  * @Route("/api/phone")
  * @OA\Tag(name="Phones")
- *    @OA\Response(
- *      response="403",
- *      description="FORBIDDEN acces non autorisé",
- * )
- *      @OA\Response(
- *      response = 405,
- *      description = "Methode interdite"
- * )
- * 
  */
-
-
 class PhoneController extends AbstractController
 {
     /**
@@ -51,41 +40,42 @@ class PhoneController extends AbstractController
 
     public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
-
         $page = $request->query->get('page');
         if (is_null($page)) {
-            $response = "400  argument à mettre";
+            $response = "400  mauvaise requete";
         }
 
         $phones = $phoneRepository->findAllPhones($page, 5);
 
-        $json = $serializer->serialize($phones, 'json', ['groups' => 'list']);
-        $response = new Response($json, 200, [
+        $json = $serializer->serialize($phones, 'json', [
+            'groups' => 'list']);
+            $response = new Response($json, 200, [
             "content-type" => "application/json"
-        ]);
+            ]);
         return $response;
     }
 
-
     /**
      * @Route("/show/{id}", name="show_phone", methods={"GET"})
-     * @ParamConverter("phone", class="App:Phone")
-     *     @OA\Parameter(name="page", in="query", 
-     *     @OA\Schema(type="integer"))
-     *     @Cache(expires="+5 minutes")
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns Phone"
-     *) 
-      *    @OA\Response(
-     *         response="404",
-     *         description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+     * @OA\Response(
+     *     response="200",
+     *     description="Returns Phone",
+     *     @OA\JsonContent(
+     *          ref=@Model(type=Phone::class, groups={"show"})
+     *     )
+     * ) 
+     * @OA\Response(
+     *     response="404",
+     *     description="URI est peut-être incorrect ou la ressource a peut-être été supprimée.",
+     *          )
+     *      )
+     *     )
      * )
      * @param Phone|null $phone
      *
      * @return Phone
      */
-     
+
     public function show(Phone $phone): Response
     {
         return $this->json($phone, Response::HTTP_OK, [

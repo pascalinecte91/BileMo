@@ -52,6 +52,13 @@ class Phone
     private $memory;
 
     /**
+     * @ORM\Column(type="string", length=355)
+     * @Groups({"show"})
+     * @OA\Property(description="Informations sur le téléphone")
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="integer")
      * @Groups({"list", "show"})
      * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
@@ -63,18 +70,6 @@ class Phone
      * )
      */
     private $price;
-
-    /**
-     * @ORM\Column(type="string", length=355)
-     * @Groups({"show"})
-     * @OA\Property(description="Informations sur le téléphone")
-     */
-    private $description;
-
-
-
-
-
 
 
     public function getId(): ?int
