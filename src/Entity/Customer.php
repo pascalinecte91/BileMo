@@ -10,12 +10,34 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
+
+
 
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ *    @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *         "customer_detail",
+ *         parameters = { "id" = "expr(object.getId())" },
+ *         absolute =true
+ *     ),
+ *     attributes = {"actions": { "read": "GET" }},
+ *     exclusion = @Hateoas\Exclusion(groups = {"list"})
+ * )
+ * @Hateoas\Relation(
+ *     name = "all",
+ *     href = @Hateoas\Route(
+ *         "customers_list",
+ *         absolute = true
+ *     ),
+ *     attributes = {"actions": { "read": "GET" }},
+ *     exclusion = @Hateoas\Exclusion(groups = {"show"})
+ * )
  */
 class Customer
 {
@@ -23,15 +45,15 @@ class Customer
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list", "show"})
      * @OA\Property(description="Identifiant du client")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, unique=false)
      * @Groups({"list","show"})
      * @OA\Property(description="Mail du client")
-     * 
      */
     private $email;
 
@@ -46,10 +68,8 @@ class Customer
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
-     * @OA\Property(
-     *     ref = @Model(type=User::class),
-     *     description = "L'utilisateur du client de Bilemo"
-     * )
+  
+     
      */
     private $user;
 

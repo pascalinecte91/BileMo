@@ -78,14 +78,14 @@ JWT Authenticator
 
 ## DOCUMENTATION
 NelmioDocApiBundle
+- Accès  API Documentation
+  http://localhost:8000/api/doc
 
 ## Login user
 {
     "username": "pascaline@gmail.com",
     "password" : "azerty"
 }
-
-A finir
 
 Auteur
 - pascale CHRISTOPHE  Elève OpenClassroom

@@ -29,7 +29,7 @@ class CustomerRepository extends ServiceEntityRepository
      * @throws EntityNotFoundException
      * @throws NonUniqueResultException
      */
-    /*public function findById(int $id): Customer
+    public function findById(int $id): Customer
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.id = :id')
@@ -43,7 +43,7 @@ class CustomerRepository extends ServiceEntityRepository
         }
 
         throw new EntityNotFoundException("Client introuvable !");
-    }*/
+    }
 
     public function findAllCustomers($page, $max)
     {

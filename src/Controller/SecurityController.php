@@ -20,8 +20,8 @@ class SecurityController extends AbstractController
      * @Route("/api/login", name="security_login", methods={"POST"})
      * @OA\Tag(name="Connexion")
      * @OA\Response(
-     *     response=200,
-     *     description="Token authentification avec requete",
+     *     response=JsonResponse::HTTP_OK,
+     *     description="Renvoi la liste des utilisateurs"
      * )
      * @OA\Response(
      *     response = 401,

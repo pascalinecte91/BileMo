@@ -128,9 +128,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
      * @see UserInterface
      */
     public function getSalt(): ?string
@@ -179,7 +176,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCustomer(Customer $customer): self
     {
         if ($this->customers->removeElement($customer)) {
-            // set the owning side to null (unless already changed)
             if ($customer->getUser() === $this) {
                 $customer->setUser(null);
             }

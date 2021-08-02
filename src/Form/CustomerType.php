@@ -2,27 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Phone;
+use App\Entity\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PhoneType extends AbstractType
+class CustomerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('email')
             ->add('name')
-            ->add('color')
-            ->add('memory')
-            ->add('price')
-            ->add('description');
+            ->add('user')
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Phone::class,
+            'data_class' => Customer::class,
         ]);
     }
 }

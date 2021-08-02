@@ -4,14 +4,8 @@
 #    methods: GET
 #    defaults: { _controller: nelmio_api_doc.controller.swagger }
     
-# config/routes.yaml
+
 app.swagger_ui:
     path: /api/doc
     methods: GET
     defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
-
-# To expose them as JSON
-#app.swagger.areas:
-#    path: /api/doc/{area}.json
-#   methods: GET
-#    defaults: { _controller: nelmio_api_doc.controller.swagger }

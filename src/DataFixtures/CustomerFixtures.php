@@ -3,10 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Customer;
-use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 use Faker\Factory;
 
@@ -23,6 +23,7 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
             $customer->setName($faker->lastName())
                 ->setEmail($faker->email())
                 ->setUser($user);
+               
             $manager->persist($customer);
         }
         $manager->flush();
