@@ -2,41 +2,40 @@
 
 namespace App\Entity;
 
-use App\Repository\CustomerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\CustomerRepository;
 use Symfony\Component\Validator\Constraints as Assert;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use JMS\Serializer\Annotation\Groups;
-
-
-
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
- *    @Hateoas\Relation(
- *     "self",
+ * @Hateoas\Relation(
+ *    "self",
+ *    href = @Hateoas\Route(
+ *       "customer_detail",
+ *       parameters = { "id" = "expr(object.getId())" },
+ *       absolute =true
+ *    ),
+ *    attributes = {
+ *       "actions": {
+ *           "read": "GET",
+ *           "delete": "DELETE",
+ *       }
+ *    },
+ *    exclusion = @Hateoas\Exclusion(groups = {"show"})
+ * )
+ * @Hateoas\Relation(
+ *     name="all",
  *     href = @Hateoas\Route(
- *         "customer_detail",
- *         parameters = { "id" = "expr(object.getId())" },
- *         absolute =true
+ *        "customers_list",
+ *        absolute = true
  *     ),
  *     attributes = {"actions": { "read": "GET" }},
  *     exclusion = @Hateoas\Exclusion(groups = {"list"})
- * )
- * @Hateoas\Relation(
- *     name = "all",
- *     href = @Hateoas\Route(
- *         "customers_list",
- *         absolute = true
- *     ),
- *     attributes = {"actions": { "read": "GET" }},
- *     exclusion = @Hateoas\Exclusion(groups = {"show"})
+ *     )
  * )
  */
 class Customer

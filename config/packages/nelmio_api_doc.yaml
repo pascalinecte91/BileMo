@@ -20,38 +20,6 @@ nelmio_api_doc:
             bearerFormat: JWT
     security:
       - Bearer: []
-    paths:
-      /api/login_check:
-          post:
-              tags:
-                  - Connexion
-              summary: Open Api
-              requestBody:
-                  content:
-                      application/json:
-                          schema:
-                              properties:
-                                  name:
-                                      type: string
-                                  password:
-                                      type: string
-                              type: object
-              responses:
-                  '200':
-                      description: Obt. Token for open API
-                      content:
-                          application/json:
-                              schema:
-                                  type: object
-                                  properties:
-                                      token:
-                                          type: string
-                  '400':
-                      description: Bad request
-                  '403':
-                      description: Forbidden
-                  '404':
-                      description: Not Found
-              security: []
+    
 
   

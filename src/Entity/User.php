@@ -16,6 +16,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * 
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -33,7 +34,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"show"})
      */
     private $roles = [];
-
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")

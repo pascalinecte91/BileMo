@@ -64,6 +64,13 @@ class SecurityController extends AbstractController
      */
     public function loginAction(): Response
     {
-        throw new BadRequestHttpException();
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->json([
+                'error' => 'Requête non valide".'
+            ], 400);
+        }
+        return $this->json([
+                'user' => $this->getUser() ? $this->getUser()->getId() : null]
+        );
     }
 }

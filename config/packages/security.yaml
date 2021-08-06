@@ -17,13 +17,6 @@ security:
       pattern: ^/api/doc
       security: false
 
-    api_phone:
-      pattern: ^/api/phone
-      security: false
-
-    api_customer:
-      pattern: ^/api/customer
-      security: false
 
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/

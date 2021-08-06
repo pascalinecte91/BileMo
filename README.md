@@ -67,7 +67,7 @@ JWT Authenticator
     - php bin/console doctrine:database:create
     - php bin/console doctrine:migrations:migrate
     - php bin/console doctrine:fixture:load
-    - symfony server
+    - symfony serve
 
     
     - _Vider cache si besoin_

@@ -2,36 +2,47 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Phone;
+use OpenApi\Annotations as OA;
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\SerializationContext;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
-use Symfony\Component\Serializer\SerializerInterface;
-
+use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
 
 
 /**
  * @Route("/api/phone")
  * @OA\Tag(name="Phones")
- *     @OA\Response(
- *     response = 401,
- *     description = "information incorrects ou token expiré"
- * )
- *     @OA\Response(
- *     response="403",
- *     description="FORBIDDEN acces non autorisé",
- * )
+ 
  */
 class PhoneController extends AbstractController
 {
+    protected $serializer;
+    protected $phoneRepository;
+
+    public function __construct(
+        SerializerSerializerInterface $serializer,
+        ValidatorInterface $validator,
+        EntityManagerInterface $manager
+    ) {
+        $this->serializer = $serializer;
+        $this->ValidatorInterface = $validator;
+        $this->EntityManagerInterface = $manager;
+    }
+
     /**
      *@Route("",  name="phones_list", methods={"GET"})
      *   @OA\Response(
@@ -77,15 +88,17 @@ class PhoneController extends AbstractController
 
     public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
+       
         $page = $request->query->get('page');
         if ($page === null) {
             $response = "400  mauvaise requete";
         }
+        
         $phones = $phoneRepository->findAllPhones($page, 5);
-
-        $json = $serializer->serialize($phones, 'json', [
-            'groups' => 'list'
-        ]);
+        
+        
+        $json = $serializer->serialize($phones, 'json'); 
+    
             $response = new Response($json, 200, [
             "content-type" => "application/json"
             ]);
@@ -108,15 +121,12 @@ class PhoneController extends AbstractController
      *      )
      *     )
      * )
-     * @param Phone|null $phone
-     *
-     * @return Phone
      */
 
-    public function show(Phone $phone): Response
+    public function show(Phone $phone)
     {
-        return $this->json($phone, Response::HTTP_OK, [
-            'groups' => ['show']
-        ]);
+    
+        $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show']));
+        return  JsonResponse::fromJsonString($phoneJson);
     }
 }

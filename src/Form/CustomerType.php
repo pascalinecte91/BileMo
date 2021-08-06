@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Customer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,7 +15,6 @@ class CustomerType extends AbstractType
         $builder
             ->add('email')
             ->add('name')
-            ->add('user')
         ;
     }
 

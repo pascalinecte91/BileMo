@@ -5,32 +5,33 @@ namespace App\Entity;
 use OpenApi\Annotations as OA;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhoneRepository;
-use JMS\Serializer\Annotation\Groups;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Hateoas\UrlGenerator\CallableUrlGenerator;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
- *    @Hateoas\Relation(
+ * @Hateoas\Relation(
  *     "self",
  *     href = @Hateoas\Route(
  *         "phone_detail",
- *         parameters = { "id" = "expr(object.getId())" },
+ *         parameters = {"id" = "expr(object.getId())" },
  *         absolute =true
- *     ),
- *     attributes = {"actions": { "read": "GET" }},
- *     exclusion = @Hateoas\Exclusion(groups = {"list"})
- * )
- * @Hateoas\Relation(
- *     name = "all",
- *     href = @Hateoas\Route(
- *         "phones_list",
- *         absolute = true
  *     ),
  *     attributes = {"actions": { "read": "GET" }},
  *     exclusion = @Hateoas\Exclusion(groups = {"show"})
  * )
+ * @Hateoas\Relation(
+ *     name="all",
+ *     href = @Hateoas\Route(
+ *        "phones_list",
+ *        absolute = true
+ *     ),
+ *     attributes = {"actions": { "read": "GET" }},
+ *     exclusion = @Hateoas\Exclusion(groups = {"list"})
+ * ) 
  */
 
 class Phone
@@ -86,6 +87,8 @@ class Phone
      * )
      */
     private $price;
+
+
 
 
     public function getId(): ?int
