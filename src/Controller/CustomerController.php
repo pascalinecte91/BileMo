@@ -27,17 +27,18 @@ use Doctrine\Persistence\ObjectManager as PersistenceObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Annotation\ParamConverter;
 use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @Route("/api/customer")
  * @OA\Tag(name="Customers")
- *      @OA\Response(
- *      response = 401,
- *      description = "information incorrects ou token expiré"
+ *     @OA\Response(
+ *     response = 401,
+ *     description = "information incorrects ou token expiré"
  * )
- *      @OA\Response(
- *      response="403",
- *      description="FORBIDDEN acces non autorisé",
+ *     @OA\Response(
+ *     response="403",
+ *     description="FORBIDDEN acces non autorisé",
  * )
  */
 class CustomerController extends AbstractController
@@ -51,79 +52,81 @@ class CustomerController extends AbstractController
         EntityManagerInterface $manager
     ) {
         $this->serializer = $serializer;
-        $this->ValidatorInterface = $validator;
-        $this->EntityManagerInterface = $manager;
+        $this->validatorInterface = $validator;
+        $this->entityManagerInterface = $manager;
     }
 
 
     /**
      * @Route("", name="customers_list", methods={"GET"})
-     *     @OA\Response(
-     *         response="200",
-     *         description="Liste",
+     * @OA\Response(
+     *     response="200",
+     *     description="Liste",
      *     @OA\Schema(
      *         type="array",
+     *         @OA\Items(
+     *             ref=@Model(type=Customer::class, groups={"list"})
+     *         )
+     *     )
+     * )
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *     mediaType = "application/json",
+     *         @OA\Property(
+     *         property = "id",
+     *         description = "identifiant",
+     *         type = "integer"
+     *         ),
+     *         @OA\Property(
+     *         property = "email",
+     *         description = "mail du customer",
+     *         type = "string"
+     *         ),
+     *         @OA\Property(
+     *         property = "nom",
+     *         description = "nom du customer",
+     *         type = "string"
+     *         ),
+     *         @OA\Property(
+     *         property = "User",
+     *         description = " rattaché au User",
+     *         type = "string"
+     *         ),
+     *     )
      *     )
      *  )
-     *  @OA\RequestBody(
-     *      @OA\MediaType(
-     *      mediaType = "application/json",
-     *          @OA\Property(
-     *          property = "id",
-     *          description = "identifiant",
-     *          type = "integer"
-     *          ),
-     *          @OA\Property(
-     *          property = "email",
-     *          description = "mail du customer",
-     *          type = "string"
-     *          ),
-     *          @OA\Property(
-     *          property = "nom",
-     *          description = "nom du customer",
-     *          type = "string"
-     *          ),
-     *          @OA\Property(
-     *          property = "User",
-     *          description = " rattaché au User",
-     *          type = "string"
-     *          ),
-     *   )
-     *)
-     *)
      */
-    public function index(Request $request, CustomerRepository $customerRepository, SerializerInterface $serializer)
+    public function index(Request $request, CustomerRepository $customerRepository)
     {
         $page = $request->query->get('page');
         if (is_null($page) || $page < 1) {
             $page = 1;
         }
+
         $customers = $customerRepository->findAllCustomers($page, 6);
-
-        $customersJson = $this->serializer->serialize($customers, "json", SerializationContext::create()->setGroups(['list']));
+        
+        $context =  SerializationContext::create()->setGroups(array("list")); 
+        $customersJson = $this->serializer->serialize(iterator_to_array($customers), 'json', $context);
+     
         return  JsonResponse::fromJsonString($customersJson);
+    
+       
     }
-
 
     /**
      * @Route("/{id}", name="customer_detail", methods={"GET"})
-     *      @OA\Response(
-     *          response="200",
-     *          description="detail ok",
-     *      @OA\JsonContent(
-     *          type="array",
-     *      @OA\Items(
-     *          ref=@Model(type=Customer::class))
-     *  )
+     * @OA\Response(
+     *     response="200",
+     *     description="detail ok",
+     *     @OA\JsonContent(
+     *         ref=@Model(type=Customer::class, groups={"show"})
+     *     )
      * )
      */
     public function show(Customer $customer)
-
     {
-
         $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
         return  JsonResponse::fromJsonString($customerJson);
-        
     }
 
     /**
@@ -132,24 +135,24 @@ class CustomerController extends AbstractController
      *      required=true,
      *     @OA\MediaType(
      *         mediaType = "application/json",
-     *          @OA\Schema(
-     *              @OA\Property(
-     *                  property = "id",
-     *                  description = "identifiant",
-     *                  type = "integer"
-     *               ),
-     *              @OA\Property(
-     *                  property = "email",
-     *                  description = "mail du customer",
-     *                  type = "string"
-     *              ),
-     *              @OA\Property(
-     *                  property = "nom",
-     *                  description = "nom du customer",
-     *                  type = "string"
-     *              ),
-     *          )
-     *      )
+     *         @OA\Schema(
+     *             @OA\Property(
+     *                 property = "id",
+     *                 description = "identifiant",
+     *                 type = "integer"
+     *             ),
+     *             @OA\Property(
+     *                 property = "email",
+     *                 description = "mail du customer",
+     *                 type = "string"
+     *             ),
+     *             @OA\Property(
+     *                 property = "nom",
+     *                 description = "nom du customer",
+     *                 type = "string"
+     *             ),
+     *         )
+     *     )
      * )
      */
     public function newCustomer(Request $request)
@@ -160,35 +163,33 @@ class CustomerController extends AbstractController
         $form->submit($data);
         if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
-            $customer->setUser($this->getUser());  
+            $customer->setUser($this->getUser());
             $manager->persist($customer);
             $manager->flush();
-           
+
 
             $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
-        return  JsonResponse::fromJsonString($customerJson);
+            return  JsonResponse::fromJsonString($customerJson);
         }
-        throw new HttpException(404, "you can't creer a customer ");
+        throw new HttpException(404, "vous ne pouvez pas creer un client ");
     }
 
     /**
      * @Route("/{id}", name="customer_delete", methods={"DELETE"})
-     *      @OA\Response(
-     *          response="204",
-     *          description="successful operation",
-     *          @Security(name="Bearer")
+     * @OA\Response(
+     *     response="204",
+     *     description="successful operation",
+     *     @Security(name="Bearer")
      * )
      */
-    public function deleteCustomer(Customer $customer, EntityManagerInterface $entityManager, Request $request)
-    {
-
-        if ($customer->getUser() === $this->getUser()) {
-            $this->manager->remove($customer);dd($customer);
-            $this->manager->flush();
-            
-            $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
-            return  JsonResponse::fromJsonString($customerJson);
-        }
-        throw new HttpException(404, "you can't delete a customer ");
+   public function deleteCustomer(Customer $customer)
+{
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($customer); 
+        $manager->flush();
+       
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+    
+
 }

@@ -7,8 +7,9 @@ use OpenApi\Annotations as OA;
 use App\Repository\CustomerRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Hateoas\Configuration\Annotation as Hateoas;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Annotation\ParamConverter;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -20,22 +21,25 @@ use JMS\Serializer\Annotation\Groups;
  *       absolute =true
  *    ),
  *    attributes = {
- *       "actions": {
- *           "read": "GET",
- *           "delete": "DELETE",
- *       }
+ *        "actions": {
+ *            "read": "GET",
+ *            "delete": "DELETE",
+ *        }
  *    },
- *    exclusion = @Hateoas\Exclusion(groups = {"show"})
+ *    exclusion = @Hateoas\Exclusion(groups = {"show", "list"})
  * )
  * @Hateoas\Relation(
- *     name="all",
- *     href = @Hateoas\Route(
- *        "customers_list",
- *        absolute = true
- *     ),
- *     attributes = {"actions": { "read": "GET" }},
- *     exclusion = @Hateoas\Exclusion(groups = {"list"})
- *     )
+ *    "all",
+ *    href = @Hateoas\Route(
+ *       "customers_list",
+ *       absolute =true
+ *    ),
+ *    attributes = {
+ *       "actions": {
+ *           "read": "GET",
+ *       }
+ *    },
+ *    exclusion = @Hateoas\Exclusion(groups = {"list"})
  * )
  */
 class Customer
@@ -113,4 +117,12 @@ class Customer
 
         return $this;
     }
-}
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+           $user->removeCustomer($this);
+            }
+        return $this;
+        }
+    }

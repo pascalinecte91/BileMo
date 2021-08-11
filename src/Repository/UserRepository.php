@@ -47,8 +47,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
             ->setMaxResults($max)  //  tu m'affectes 7 requetes tel max
-            ->getQuery();                  // obtient  la page
-
+            ->getQuery();                // obtient  la page
+         
         return new Paginator($query);
     }
     /**

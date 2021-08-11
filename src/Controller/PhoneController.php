@@ -39,8 +39,8 @@ class PhoneController extends AbstractController
         EntityManagerInterface $manager
     ) {
         $this->serializer = $serializer;
-        $this->ValidatorInterface = $validator;
-        $this->EntityManagerInterface = $manager;
+        $this->validatorInterface = $validator;
+        $this->entityManagerInterface = $manager;
     }
 
     /**
@@ -48,9 +48,12 @@ class PhoneController extends AbstractController
      *   @OA\Response(
      *      response=JsonResponse::HTTP_OK,
      *      description="Liste des telephones",
-     *   @OA\Schema(
-     *      type="array",
-     * )
+     *     @OA\Schema(
+     *         type="array",
+     *         @OA\Items(
+     *             ref=@Model(type=Phone::class, groups={"list"})
+     *         )
+     *     )
      * ) 
      *   @OA\RequestBody(
      *      @OA\MediaType(
@@ -86,23 +89,20 @@ class PhoneController extends AbstractController
      * )
      */
 
-    public function index(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer)
+    public function index(Request $request, PhoneRepository $phoneRepository)
     {
        
         $page = $request->query->get('page');
-        if ($page === null) {
-            $response = "400  mauvaise requete";
+        if (($page === null) || $page < 1) {
+            $page = 1;
         }
         
-        $phones = $phoneRepository->findAllPhones($page, 5);
-        
-        
-        $json = $serializer->serialize($phones, 'json'); 
     
-            $response = new Response($json, 200, [
-            "content-type" => "application/json"
-            ]);
-        return $response;
+        $phones = $phoneRepository->findAllPhones($page, 5);
+
+        $phonesJson = $this->serializer->serialize(iterator_to_array($phones), "json", SerializationContext::create()->setGroups('list')); 
+      
+        return  JsonResponse::fromJsonString($phonesJson);
     }
 
     /**
@@ -126,7 +126,9 @@ class PhoneController extends AbstractController
     public function show(Phone $phone)
     {
     
-        $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show']));
+        $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show'])); 
+       
+        
         return  JsonResponse::fromJsonString($phoneJson);
     }
 }

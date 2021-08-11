@@ -20,16 +20,24 @@ use JMS\Serializer\Annotation\Groups;
  *         parameters = {"id" = "expr(object.getId())" },
  *         absolute =true
  *     ),
- *     attributes = {"actions": { "read": "GET" }},
- *     exclusion = @Hateoas\Exclusion(groups = {"show"})
+ *     attributes = {
+ *         "actions": {
+ *              "read": "GET",
+ *         }
+ *     },
+ *     exclusion = @Hateoas\Exclusion(groups = {"list", "show"})
  * )
  * @Hateoas\Relation(
- *     name="all",
+ *     "all",
  *     href = @Hateoas\Route(
  *        "phones_list",
  *        absolute = true
  *     ),
- *     attributes = {"actions": { "read": "GET" }},
+ *     attributes = {
+ *         "actions": {
+ *              "read": "GET",
+ *         }
+ *     },
  *     exclusion = @Hateoas\Exclusion(groups = {"list"})
  * ) 
  */

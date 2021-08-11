@@ -154,6 +154,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+   
+
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
 
     /**
      * @return Collection|Customer[]
@@ -175,15 +183,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeCustomer(Customer $customer): self
     {
-        if ($this->customers->removeElement($customer)) {
+        if ($this->customer->removeElement($customer)) {
             if ($customer->getUser() === $this) {
                 $customer->setUser(null);
             }
-        }
-
         return $this;
     }
-
+    }
     public function getName(): ?string
     {
         return $this->name;
