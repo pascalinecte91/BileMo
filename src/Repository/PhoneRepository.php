@@ -42,7 +42,6 @@ class PhoneRepository extends ServiceEntityRepository
             );
         }
         $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
-
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
             ->setMaxResults($max)  //  tu m'affectes le nombre  tel max
             ->getQuery();                  // obtient  la page

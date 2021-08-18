@@ -29,8 +29,8 @@ Seuls les clients référencés peuvent accéder aux API. Les clients de l’API
 
 ### Pré Requis
 
-    - Symfony 5.3.2 (env: dev, debug: true)
-    - PHP 7.4.9 (cli) (built: Aug 4 2020 11:52:41) ( ZTS Visual C++ 2017 x64 )
+    - Symfony 5.3.3 (env: dev)
+    - PhpMyAdmin 5.1.1
     - Wampserver - MySQL 5.7.31
     - MariaDB - 10.4.13
     - Apache - 2.4.46

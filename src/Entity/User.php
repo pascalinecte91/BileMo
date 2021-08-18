@@ -68,7 +68,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->customers = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -81,7 +80,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
-
 
     /**
      * A visual identifier that represents this user.
@@ -140,7 +138,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-
     }
 
     public function getEmail(): ?string
@@ -154,7 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-   
+
 
     public function setCustomer(?Customer $customer): self
     {
@@ -187,8 +184,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($customer->getUser() === $this) {
                 $customer->setUser(null);
             }
-        return $this;
-    }
+            return $this;
+        }
     }
     public function getName(): ?string
     {

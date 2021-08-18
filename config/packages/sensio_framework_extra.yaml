@@ -3,6 +3,6 @@ sensio_framework_extra:
   #  request:     { converters: true, auto_convert: false }
   #  view:        { annotations: true }
   #  cache:       { annotations: true }
-# security:    { annotations: true }
+  #  security:    { annotations: true }
 
  

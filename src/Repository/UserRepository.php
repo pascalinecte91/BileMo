@@ -24,31 +24,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         parent::__construct($registry, User::class);
     }
-
+    /**
+     * @param integer $page
+     * @param integer $max
+     * @param string $order
+     * @param [type] $customer
+     * @return void
+     */
 
     public function findAllUsers($page, $max)
     {
-        if (!is_numeric($page)) {
-            throw new InvalidArgumentException(
-                'La valeur de l\'argument $page est incorrecte (valeur : ' . $page . ').'
-            );
-        }
-
-        if ($page < 1) {
-            throw new NotFoundHttpException('La page demandée n\'existe pas');
-        }
-
-        if (!is_numeric($max)) {
-            throw new InvalidArgumentException(
-                'La valeur de l\'argument $max est incorrecte (valeur : ' . $max . ').'
-            );
-        }
         $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
-
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
             ->setMaxResults($max)  //  tu m'affectes 7 requetes tel max
-            ->getQuery();                // obtient  la page
-         
+            ->getQuery();               // obtient  la page
+
         return new Paginator($query);
     }
     /**

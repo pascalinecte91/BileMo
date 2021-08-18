@@ -21,7 +21,7 @@ class ExceptionListener
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
-       
+
         $response = new Response();
 
 
@@ -30,7 +30,7 @@ class ExceptionListener
             $response->headers->replace($exception->getHeaders());
         } else {
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-          //  ->setContent(json_encode(['message'=>'Internal error']));
+            //  ->setContent(json_encode(['message'=>'Internal error']));
         }
 
         $event->setResponse($response);

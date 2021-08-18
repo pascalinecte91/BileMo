@@ -14,8 +14,7 @@ class CustomerType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('name')
-        ;
+            ->add('name');
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -46,7 +46,6 @@ class Customer
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"list", "show"})
      * @OA\Property(description="Identifiant du client")
@@ -55,7 +54,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=180, unique=false)
-     * @Groups({"list","show"})
+     * @Groups({"show"})
      * @OA\Property(description="Mail du client")
      */
     private $email;
@@ -71,8 +70,6 @@ class Customer
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
-  
-     
      */
     private $user;
 
@@ -121,8 +118,8 @@ class Customer
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-           $user->removeCustomer($this);
-            }
-        return $this;
+            $user->removeCustomer($this);
         }
+        return $this;
     }
+}

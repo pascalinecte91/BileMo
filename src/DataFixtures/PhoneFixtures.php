@@ -41,5 +41,4 @@ class PhoneFixtures extends Fixture
 
         $manager->flush();
     }
-  
 }

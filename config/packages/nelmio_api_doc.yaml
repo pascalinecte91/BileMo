@@ -10,7 +10,7 @@ nelmio_api_doc:
         description: API over HTTP
     info:
       title: BileMo  App
-      description: Acces aux clients de BileMo
+      description: Acces - Documentation pour les clients de "BileMo"
       version: 1.0.0
     components:
       securitySchemes:

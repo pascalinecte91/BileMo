@@ -18,20 +18,21 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
         $faker = Factory::create('fr-FR');
 
         for ($i =  0; $i <= 50; $i++) {
-            $user= $this->getReference('user_' . ($i%6));
+            $user = $this->getReference('user_' . ($i % 6));
+
             $customer = new Customer();
             $customer->setName($faker->lastName())
                 ->setEmail($faker->email())
                 ->setUser($user);
-               
+
             $manager->persist($customer);
         }
         $manager->flush();
     }
-    public function getDependencies (){
+    public function getDependencies()
+    {
         return [
             UserFixtures::class
         ];
-
     }
 }

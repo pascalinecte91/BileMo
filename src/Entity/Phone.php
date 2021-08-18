@@ -96,9 +96,6 @@ class Phone
      */
     private $price;
 
-
-
-
     public function getId(): ?int
     {
         return $this->id;

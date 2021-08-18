@@ -69,8 +69,10 @@ class SecurityController extends AbstractController
                 'error' => 'Requête non valide".'
             ], 400);
         }
-        return $this->json([
-                'user' => $this->getUser() ? $this->getUser()->getId() : null]
+        return $this->json(
+            [
+                'user' => $this->getUser() ? $this->getUser()->getId() : null
+            ]
         );
     }
 }

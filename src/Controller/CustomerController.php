@@ -104,13 +104,11 @@ class CustomerController extends AbstractController
         }
 
         $customers = $customerRepository->findAllCustomers($page, 6);
-        
-        $context =  SerializationContext::create()->setGroups(array("list")); 
+
+        $context =  SerializationContext::create()->setGroups(array("list"));
         $customersJson = $this->serializer->serialize(iterator_to_array($customers), 'json', $context);
-     
+
         return  JsonResponse::fromJsonString($customersJson);
-    
-       
     }
 
     /**
@@ -167,7 +165,6 @@ class CustomerController extends AbstractController
             $manager->persist($customer);
             $manager->flush();
 
-
             $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
             return  JsonResponse::fromJsonString($customerJson);
         }
@@ -182,14 +179,12 @@ class CustomerController extends AbstractController
      *     @Security(name="Bearer")
      * )
      */
-   public function deleteCustomer(Customer $customer)
-{
+    public function deleteCustomer(Customer $customer)
+    {
         $manager = $this->getDoctrine()->getManager();
-        $manager->remove($customer); 
+        $manager->remove($customer);
         $manager->flush();
-       
+
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
-    
-
 }

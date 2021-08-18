@@ -23,8 +23,13 @@ class CustomerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Customer::class);
     }
-    /**
+
+    /** 
      * @param int $id
+     * @param integer $page
+     * @param integer user_id
+     * @param string $order
+     * @param [type] $user
      * @return Customer
      * @throws EntityNotFoundException
      * @throws NonUniqueResultException
@@ -35,8 +40,7 @@ class CustomerRepository extends ServiceEntityRepository
             ->where('c.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
 
         if ($query instanceof Customer) {
             return $query;
@@ -63,7 +67,6 @@ class CustomerRepository extends ServiceEntityRepository
             );
         }
         $query = $this->createQueryBuilder('pg')   //genere ma requete  ma page
-
             ->setFirstResult(($page - 1) * $max)  // affectation du resultat  
             ->setMaxResults($max)  //  tu m'affectes nbre tel max
             ->getQuery();                  // obtient  la page
