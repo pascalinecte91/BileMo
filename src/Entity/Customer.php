@@ -46,6 +46,7 @@ class Customer
 {
     /**
      * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"list", "show"})
      * @OA\Property(description="Identifiant du client")

@@ -28,6 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Annotation\ParamConverter;
 use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route("/api/customer")
@@ -102,8 +103,9 @@ class CustomerController extends AbstractController
         if (is_null($page) || $page < 1) {
             $page = 1;
         }
-
-        $customers = $customerRepository->findAllCustomers($page, 6);
+        
+        
+        $customers = $customerRepository->findAllPaginatedByUserId($this->getUser(), $page, 6);
 
         $context =  SerializationContext::create()->setGroups(array("list"));
         $customersJson = $this->serializer->serialize(iterator_to_array($customers), 'json', $context);
@@ -162,7 +164,9 @@ class CustomerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
             $customer->setUser($this->getUser());
+       
             $manager->persist($customer);
+            
             $manager->flush();
 
             $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
