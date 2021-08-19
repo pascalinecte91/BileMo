@@ -6,12 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use OpenApi\Annotations as OA;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use Swagger\Annotations as SWG;
-use Nelmio\ApiDocBundle\Annotation\Model;
 
 
 class SecurityController extends AbstractController
@@ -41,7 +36,7 @@ class SecurityController extends AbstractController
      *         mediaType = "application/json",
      *     @OA\Schema(
      *          @OA\Property(
-     *              property = "email",
+     *              property = "username",
      *              description = "Adresse Mail de l'utilisateur",
      *              type = "string"
      *           ),
@@ -51,16 +46,9 @@ class SecurityController extends AbstractController
      *              type = "string",
      *              format = "password"
      *           ),
-     *          @OA\Property(
-     *              property = "username",
-     *              description = "Nom ",
-     *              type = "string",
-     *              format = "string"        
-     *          )
      *     )
      * )
      * )
-     * @Security()
      */
     public function loginAction(): Response
     {

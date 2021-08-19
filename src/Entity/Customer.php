@@ -7,9 +7,7 @@ use OpenApi\Annotations as OA;
 use App\Repository\CustomerRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Hateoas\Configuration\Annotation as Hateoas;
-use Sensio\Bundle\FrameworkExtraBundle\Annotation\ParamConverter;
 use JMS\Serializer\Annotation\Groups;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)

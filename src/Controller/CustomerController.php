@@ -6,8 +6,6 @@ use App\Entity\Customer;
 use App\Entity\User;
 use App\Form\CustomerType;
 use OpenApi\Annotations as OA;
-use Doctrine\ORM\EntityManager;
-use Swagger\Annotations as SWG;
 use App\Repository\UserRepository;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,12 +21,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Doctrine\Persistence\ObjectManager as PersistenceObjectManager;
-use Sensio\Bundle\FrameworkExtraBundle\Annotation\ParamConverter;
 use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route("/api/customer")
@@ -125,6 +119,9 @@ class CustomerController extends AbstractController
      */
     public function show(Customer $customer)
     {
+        if($this->getUser() !==$customer->getUser()){
+            throw new NotFoundHttpException();
+        }
         $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
         return  JsonResponse::fromJsonString($customerJson);
     }
@@ -185,6 +182,10 @@ class CustomerController extends AbstractController
      */
     public function deleteCustomer(Customer $customer)
     {
+        if($this->getUser() !==$customer->getUser()){
+            throw new NotFoundHttpException();
+        } 
+
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($customer);
         $manager->flush();

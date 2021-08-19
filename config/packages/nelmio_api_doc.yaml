@@ -5,12 +5,9 @@ nelmio_api_doc:
       - ^/api(?!/doc$)
 
   documentation:
-    servers:
-      - url: http://api.bileMo.com
-        description: API over HTTP
     info:
       title: BileMo  App
-      description: Acces - Documentation pour les clients de "BileMo"
+      description: Documentation pour les clients de "BileMo"
       version: 1.0.0
     components:
       securitySchemes:

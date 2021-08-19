@@ -7,8 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhoneRepository;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Constraints as Assert;
-use Hateoas\UrlGenerator\CallableUrlGenerator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use JMS\Serializer\Annotation\Groups;
 
 /**
