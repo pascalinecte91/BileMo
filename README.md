@@ -18,68 +18,77 @@ Après une réunion dense avec le client, il a été identifié un certain nombr
 
 Seuls les clients référencés peuvent accéder aux API. Les clients de l’API doivent être authentifiés via OAuth ou JWT.
 
-    1. consulter la liste des produits BileMo 
-    2. consulter les détails d’un produit BileMo 
-    3. consulter la liste des utilisateurs inscrits liés à un client sur le site web 
-    4. consulter le détail d’un utilisateur inscrit lié à un client 
-    5. ajouter un nouvel utilisateur lié à un client 
-    6. supprimer un utilisateur ajouté par un client.
+  1. consulter la liste des produits BileMo 
+  2. consulter les détails d’un produit BileMo 
+  3. consulter la liste des utilisateurs inscrits liés à un client sur le site web 
+  4. consulter le détail d’un utilisateur inscrit lié à un client 
+  5. ajouter un nouvel utilisateur lié à un client 
+  6. supprimer un utilisateur ajouté par un client.
 
  Seuls les clients référencés peuvent accéder aux API. Les clients de l’API doivent être authentifiés via OAuth ou JWT
 
 ### Pré Requis
 
-    - Symfony 5.3.3 (env: dev)
-    - PhpMyAdmin 5.1.1
-    - Wampserver - MySQL 5.7.31
-    - MariaDB - 10.4.13
-    - Apache - 2.4.46
-    - PHP 7.4.9
-    - composer 
-    - postman 8.7.0 (si besoin): [Lien](https://www.postman.com/downloads/)
+  - Symfony 5.3.3 (env: dev)
+  - PhpMyAdmin 5.1.1
+  - Wampserver - MySQL 5.7.31
+  - MariaDB - 10.4.13
+  - Apache - 2.4.46
+  - PHP 7.4.9
+  - composer [Link download composer](https://getcomposer.org/download/)
+  - postman 8.7.0 [Link download postman](https://www.postman.com/downloads/)
+  - info symfony [Link doctrine 5.3 version](https://symfony.com/doc/current/doctrine.html)
 
 ### Librairies
-Faker v1.9.2
-JWT Authenticator
+* Faker v1.9.2
+* JWT Authenticator
 
 ###  GUIDE D'INSTALLATION 
 ( à supposer que votre environnement soit configuré avec env.dev)
 
-    - Clonez ou téléchargez le repository GitHub dans le dossier :
-      git clone :(https://github.com/pascalinecte91/projet_bileMo.git)
+  - Clonez ou téléchargez le repository GitHub dans le dossier :
+    git clone : [lien vers dossier à cloner](https://github.com/pascalinecte91/projet_bileMo.git)
 
-    - creation DB - configurer le fichier .env exemple :
-      DATABASE_URL="mysql://root@127.0.0.1:3306/projet_bileMo?serverVersion=5.7"
-    - composer install
+  - creation DB - configurer le fichier .env exemple :
+    DATABASE_URL="mysql://root@127.0.0.1:3306/projet_bileMo?serverVersion=5.7"
+  - composer install
 
 
 ## Configuration JWT
-    - composer require lexik/jwt-authentication-bundle
-    - mkdir config/jwt
+  - composer require lexik/jwt-authentication-bundle
+  - mkdir config/jwt
+  - [Documentation du bundle JWT](https://github.com/lexik/LexikJWTAuthenticationBundle)
 
-    1. openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-      - Mettre la Passphrase (fichier .env) JWT_PASSPHRASE 
+  1. openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+    - Mettre la Passphrase (fichier .env) JWT_PASSPHRASE 
 
-    2. openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-      - Remmettre la Passphrase (fichier .env) JWT_PASSPHRASE :
+  2. openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+    - Remmettre la Passphrase (fichier .env) JWT_PASSPHRASE 
 
-    ### Commandes Symfony executions diverses
-    - php bin/console doctrine:database:create
-    - php bin/console doctrine:migrations:migrate
-    - php bin/console doctrine:fixture:load
-    - symfony serve
 
-    
-    - _Vider cache si besoin_
-      - php bin/console c:c ( cache:clear )
+## Commandes Symfony executions diverses
+  1. Creation database : 
+  * php bin/console doctrine:database:create
+  2. Proceder à la migration : 
+  * php bin/console make:migration
+  * php bin/console doctrine:migrations:migrate
+  3. Installer les fixtures :
+  * php bin/console doctrine:fixture:load
 
-    - _Routes du projet_
-      - php bin/console debug:router
+
+## Autres commandes:
+
+- Démarrer serveur : 
+    - symfony server:start
+ - Vider cache si besoin ( utile pour les groupes):
+    - php bin/console c:c ( cache:clear )
+- Consulter chaque route du projet:
+    - php bin/console debug:router
 
 ## DOCUMENTATION
 NelmioDocApiBundle
 - Accès  API Documentation
-  http://localhost:8000/api/doc
+  [localhost acces Doc](http://localhost:8000/api/doc)
 
 ## Login user
 {
