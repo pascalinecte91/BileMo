@@ -75,4 +75,5 @@ class CustomerRepository extends ServiceEntityRepository
 
         return new Paginator($query);
     }
+   
 }

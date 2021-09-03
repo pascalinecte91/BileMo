@@ -1,6 +1,8 @@
 ## P7 BileMo   -  Description du projet
 
+
 _Contexte_
+
 
 ## Créez un web service exposant une API
 **BileMo est une entreprise offrant toute une sélection de téléphones mobiles haut de gamme.**
@@ -25,72 +27,68 @@ Seuls les clients référencés peuvent accéder aux API. Les clients de l’API
   5. ajouter un nouvel utilisateur lié à un client 
   6. supprimer un utilisateur ajouté par un client.
 
+
  Seuls les clients référencés peuvent accéder aux API. Les clients de l’API doivent être authentifiés via OAuth ou JWT
 
 ### Pré Requis
 
-  - Symfony 5.3.3 (env: dev)
-  - PhpMyAdmin 5.1.1
-  - Wampserver - MySQL 5.7.31
-  - MariaDB - 10.4.13
-  - Apache - 2.4.46
-  - PHP 7.4.9
-  - composer [Link download composer](https://getcomposer.org/download/)
-  - postman 8.7.0 [Link download postman](https://www.postman.com/downloads/)
-  - info symfony [Link doctrine 5.3 version](https://symfony.com/doc/current/doctrine.html)
+  - MySQL 5.7
+  - Apache  2.4
+  - PHP 7.4
+  - Composer [Link download composer](https://getcomposer.org/download/)
 
-### Librairies
-* Faker v1.9.2
-* JWT Authenticator
 
-###  GUIDE D'INSTALLATION 
-( à supposer que votre environnement soit configuré avec env.dev)
+##  Guide d'installation
 
   - Clonez ou téléchargez le repository GitHub dans le dossier :
-    git clone : [lien vers dossier à cloner](https://github.com/pascalinecte91/projet_bileMo.git)
+  ```sh
+  git clone https://github.com/pascalinecte91/projet_bileMo.git
+  ```
 
-  - creation DB - configurer le fichier .env exemple :
+  - Copier le fichier .env dans un autre fichier .env.local
+  - creation DataBase, configurer le fichier .env.local exemple :
+  ```yaml
     DATABASE_URL="mysql://root@127.0.0.1:3306/projet_bileMo?serverVersion=5.7"
-  - composer install
-
-
+  ```
+  - lancez l'installation des dépendances
+  ```sh
+   composer install
+   
+  - php bin/console asset:install
+  ```
 ## Configuration JWT
-  - composer require lexik/jwt-authentication-bundle
   - mkdir config/jwt
   - [Documentation du bundle JWT](https://github.com/lexik/LexikJWTAuthenticationBundle)
-
+  ```sh
   1. openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-    - Mettre la Passphrase (fichier .env) JWT_PASSPHRASE 
+    - Mettre la Passphrase (fichier .env.local) JWT_PASSPHRASE 
 
   2. openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-    - Remmettre la Passphrase (fichier .env) JWT_PASSPHRASE 
-
+    - Remmettre la Passphrase (fichier .env.local) JWT_PASSPHRASE 
+  ```
 
 ## Commandes Symfony executions diverses
+  ```
   1. Creation database : 
-  * php bin/console doctrine:database:create
+    - php bin/console doctrine:database:create
   2. Proceder à la migration : 
-  * php bin/console make:migration
-  * php bin/console doctrine:migrations:migrate
+    - php bin/console doctrine:migrations:migrate
   3. Installer les fixtures :
-  * php bin/console doctrine:fixture:load
-
+    - php bin/console doctrine:fixture:load
+```
 
 ## Autres commandes:
+```
+ - Vider cache si besoin:
+    - php bin/console cache:clear
+```
 
-- Démarrer serveur : 
-    - symfony server:start
- - Vider cache si besoin ( utile pour les groupes):
-    - php bin/console c:c ( cache:clear )
-- Consulter chaque route du projet:
-    - php bin/console debug:router
+## Documentation
 
-## DOCUMENTATION
-NelmioDocApiBundle
 - Accès  API Documentation
-  [localhost acces Doc](http://localhost:8000/api/doc)
+  http://[votre domaine]/api/doc
 
-## Login user
+## Login user (si fixtures installées)
 {
     "username": "pascaline@gmail.com",
     "password" : "azerty"

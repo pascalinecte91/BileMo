@@ -22,7 +22,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * @Route("/api/customer")
@@ -34,6 +37,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *     @OA\Response(
  *     response="403",
  *     description="FORBIDDEN acces non autorisé",
+ * )
+ *     @OA\Response(
+ *     response="404",
+ *     description="file not found",
  * )
  */
 class CustomerController extends AbstractController
@@ -97,12 +104,17 @@ class CustomerController extends AbstractController
         if (is_null($page) || $page < 1) {
             $page = 1;
         }
-        
-        
-        $customers = $customerRepository->findAllPaginatedByUserId($this->getUser(), $page, 6);
+        $cache = new FilesystemTagAwareAdapter();
+        $customers = $cache->get('customers_index_' .$page, function (ItemInterface $item) use($customerRepository, $page) {
+            $item->expiresAfter(86400); 
+            $item->tag('customer_index');
+            $customers = $customerRepository->findAllPaginatedByUserId($this->getUser(), $page, 6);
+            return iterator_to_array($customers);
+        });
+
 
         $context =  SerializationContext::create()->setGroups(array("list"));
-        $customersJson = $this->serializer->serialize(iterator_to_array($customers), 'json', $context);
+        $customersJson = $this->serializer->serialize($customers, 'json', $context);
 
         return  JsonResponse::fromJsonString($customersJson);
     }
@@ -117,34 +129,40 @@ class CustomerController extends AbstractController
      *     )
      * )
      */
-    public function show(Customer $customer)
+    public function show(CustomerRepository $customerRepository, $id)
     {
-        if($this->getUser() !==$customer->getUser()){
+        
+        $cache = new FilesystemTagAwareAdapter();
+        $cache->prune();
+        $customer = $cache->get('customer_show_' .$id, function (ItemInterface $item) use($customerRepository, $id) {
+            $item->expiresAfter(86400);
+            $customer = $customerRepository->findOneBy(['id' => $id, 'user' => $this->getUser()]);
+            return $customer;
+        });
+   
+        if(!$customer){
             throw new NotFoundHttpException();
         }
+      
         $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
         return  JsonResponse::fromJsonString($customerJson);
     }
 
     /**
      * @Route("", name="customer_new", methods={"POST"})
+     * @Security(name="Bearer")
      * @OA\RequestBody(
-     *      required=true,
+     *     required=true,
      *     @OA\MediaType(
      *         mediaType = "application/json",
      *         @OA\Schema(
-     *             @OA\Property(
-     *                 property = "id",
-     *                 description = "identifiant",
-     *                 type = "integer"
-     *             ),
      *             @OA\Property(
      *                 property = "email",
      *                 description = "mail du customer",
      *                 type = "string"
      *             ),
      *             @OA\Property(
-     *                 property = "nom",
+     *                 property = "name",
      *                 description = "nom du customer",
      *                 type = "string"
      *             ),
@@ -155,21 +173,26 @@ class CustomerController extends AbstractController
     public function newCustomer(Request $request)
     {
         $customer = new Customer();
+        $customer->setUser($this->getUser());
         $form = $this->createForm(CustomerType::class, $customer);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
-            $customer->setUser($this->getUser());
-       
-            $manager->persist($customer);
             
+
+            $manager->persist($customer);
+
             $manager->flush();
 
+            $cache = new FilesystemTagAwareAdapter();
+            $cache->invalidateTags(['customer_index']);
+
             $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
-            return  JsonResponse::fromJsonString($customerJson);
+            return  JsonResponse::fromJsonString($customerJson, Response::HTTP_CREATED);
         }
-        throw new HttpException(404, "vous ne pouvez pas creer un client ");
+        throw new HttpException(400, "vous avez une erreur dans votre requête ");
     }
 
     /**
@@ -182,9 +205,12 @@ class CustomerController extends AbstractController
      */
     public function deleteCustomer(Customer $customer)
     {
-        if($this->getUser() !==$customer->getUser()){
+        $cache = new FilesystemTagAwareAdapter();
+        $cache->delete('customer_show_' .$customer->getId());
+        $cache->invalidateTags(['customer_index']);
+        if ($this->getUser() !== $customer->getUser()) {
             throw new NotFoundHttpException();
-        } 
+        }
 
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($customer);

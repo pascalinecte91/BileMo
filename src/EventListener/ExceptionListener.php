@@ -29,8 +29,8 @@ class ExceptionListener
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
         } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            //  ->setContent(json_encode(['message'=>'Internal error']));
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+              ->setContent(json_encode(['message'=>'Internal error']));
         }
 
         $event->setResponse($response);

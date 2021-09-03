@@ -5,12 +5,15 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use App\Repository\CustomerRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @UniqueEntity({"email", "user"})
  * @Hateoas\Relation(
  *    "self",
  *    href = @Hateoas\Route(
@@ -52,7 +55,8 @@ class Customer
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=false)
+     * @ORM\Column(name="email", type="string", length=180)
+     * @Assert\Email
      * @Groups({"show"})
      * @OA\Property(description="Mail du client")
      */

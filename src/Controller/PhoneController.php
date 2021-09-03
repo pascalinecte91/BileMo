@@ -18,44 +18,53 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use JMS\Serializer\SerializerInterface as SerializerSerializerInterface;
-
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use Twig\Cache\FilesystemCache;
 
 /**
  * @Route("/api/phone")
  * @OA\Tag(name="Phones")
- 
  */
 class PhoneController extends AbstractController
 {
     protected $serializer;
     protected $phoneRepository;
 
+ 
+
     public function __construct(
         SerializerSerializerInterface $serializer,
         ValidatorInterface $validator,
         EntityManagerInterface $manager
+     
     ) {
         $this->serializer = $serializer;
         $this->validatorInterface = $validator;
         $this->entityManagerInterface = $manager;
+       
+      
     }
-
+   
     /**
      *@Route("",  name="phones_list", methods={"GET"})
      *   @OA\Response(
-     *      response=JsonResponse::HTTP_OK,
+     *      response="200",
      *      description="Liste des telephones",
-     *     @OA\Schema(
-     *         type="array",
-     *         @OA\Items(
-     *             ref=@Model(type=Phone::class, groups={"list"})
-     *         )
+     *      @OA\Schema(
+     *          type="array",
+     *          @OA\Items(
+     *              ref=@Model(type=Phone::class, groups={"list"})
+     *          )
      *     )
      * ) 
      *   @OA\RequestBody(
      *      @OA\MediaType(
      *          mediaType = "application/json",
-     *          @OA\Schema(
      *              @OA\Property(
      *                  property = "id",
      *                  description = "identifiant",
@@ -81,23 +90,30 @@ class PhoneController extends AbstractController
      *                  description = "description complète en detail",
      *                  type = "string"
      *              ),
-     *          )
      *      )
      * )
+     * @Cache(expires="tomorrow")
      */
 
     public function index(Request $request, PhoneRepository $phoneRepository)
     {
-       
+
+
         $page = $request->query->get('page');
         if (($page === null) || $page < 1) {
             $page = 1;
         }
+        $cache = new FilesystemAdapter();
+        $phones = $cache->get('phones_index_' .$page, function (ItemInterface $item) use($phoneRepository, $page) {
+            $item->expiresAfter(86400);
+            $phones = $phoneRepository->findAllPhones($page, 5);
+            return iterator_to_array($phones);
+        });
+   
+     
         
-    
-        $phones = $phoneRepository->findAllPhones($page, 5);
 
-        $phonesJson = $this->serializer->serialize(iterator_to_array($phones), "json", SerializationContext::create()->setGroups('list')); 
+        $phonesJson = $this->serializer->serialize($phones, "json", SerializationContext::create()->setGroups(['list'])); 
       
         return  JsonResponse::fromJsonString($phonesJson);
     }
@@ -118,10 +134,21 @@ class PhoneController extends AbstractController
      *      )
      *     )
      * )
+     * @Cache(expires="tomorrow")
      */
 
-    public function show(Phone $phone)
+    public function show(PhoneRepository $phoneRepository, $id)
     {
+       $cache = new FilesystemAdapter();
+        $phone = $cache->get('phone_show_' .$id, function (ItemInterface $item) use($phoneRepository, $id) {
+            $item->expiresAfter(86400);
+            $phone = $phoneRepository->find($id);
+            return $phone;
+        });
+   
+        if(!$phone){
+            throw new NotFoundHttpException();
+        }
     
         $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show'])); 
        
