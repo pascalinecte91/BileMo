@@ -105,8 +105,8 @@ class CustomerController extends AbstractController
             $page = 1;
         }
         $cache = new FilesystemTagAwareAdapter();
-        $customers = $cache->get('customers_index_' .$page, function (ItemInterface $item) use($customerRepository, $page) {
-            $item->expiresAfter(86400); 
+        $customers = $cache->get('customers_index_' . $page, function (ItemInterface $item) use ($customerRepository, $page) {
+            $item->expiresAfter(86400);
             $item->tag('customer_index');
             $customers = $customerRepository->findAllPaginatedByUserId($this->getUser(), $page, 6);
             return iterator_to_array($customers);
@@ -131,19 +131,19 @@ class CustomerController extends AbstractController
      */
     public function show(CustomerRepository $customerRepository, $id)
     {
-        
+
         $cache = new FilesystemTagAwareAdapter();
         $cache->prune();
-        $customer = $cache->get('customer_show_' .$id, function (ItemInterface $item) use($customerRepository, $id) {
+        $customer = $cache->get('customer_show_' . $id, function (ItemInterface $item) use ($customerRepository, $id) {
             $item->expiresAfter(86400);
             $customer = $customerRepository->findOneBy(['id' => $id, 'user' => $this->getUser()]);
             return $customer;
         });
-   
-        if(!$customer){
+
+        if (!$customer) {
             throw new NotFoundHttpException();
         }
-      
+
         $customerJson = $this->serializer->serialize($customer, "json", SerializationContext::create()->setGroups(['show']));
         return  JsonResponse::fromJsonString($customerJson);
     }
@@ -177,10 +177,10 @@ class CustomerController extends AbstractController
         $form = $this->createForm(CustomerType::class, $customer);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
-            
+
 
             $manager->persist($customer);
 
@@ -206,7 +206,7 @@ class CustomerController extends AbstractController
     public function deleteCustomer(Customer $customer)
     {
         $cache = new FilesystemTagAwareAdapter();
-        $cache->delete('customer_show_' .$customer->getId());
+        $cache->delete('customer_show_' . $customer->getId());
         $cache->invalidateTags(['customer_index']);
         if ($this->getUser() !== $customer->getUser()) {
             throw new NotFoundHttpException();

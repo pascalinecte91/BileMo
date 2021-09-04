@@ -35,21 +35,19 @@ class PhoneController extends AbstractController
     protected $serializer;
     protected $phoneRepository;
 
- 
+
 
     public function __construct(
         SerializerSerializerInterface $serializer,
         ValidatorInterface $validator,
         EntityManagerInterface $manager
-     
+
     ) {
         $this->serializer = $serializer;
         $this->validatorInterface = $validator;
         $this->entityManagerInterface = $manager;
-       
-      
     }
-   
+
     /**
      *@Route("",  name="phones_list", methods={"GET"})
      *   @OA\Response(
@@ -104,17 +102,17 @@ class PhoneController extends AbstractController
             $page = 1;
         }
         $cache = new FilesystemAdapter();
-        $phones = $cache->get('phones_index_' .$page, function (ItemInterface $item) use($phoneRepository, $page) {
+        $phones = $cache->get('phones_index_' . $page, function (ItemInterface $item) use ($phoneRepository, $page) {
             $item->expiresAfter(86400);
-            $phones = $phoneRepository->findAllPhones($page, 5);
+            $phones = $phoneRepository->findAllPhones($page, 6);
             return iterator_to_array($phones);
         });
-   
-     
-        
 
-        $phonesJson = $this->serializer->serialize($phones, "json", SerializationContext::create()->setGroups(['list'])); 
-      
+
+
+
+        $phonesJson = $this->serializer->serialize($phones, "json", SerializationContext::create()->setGroups(['list']));
+
         return  JsonResponse::fromJsonString($phonesJson);
     }
 
@@ -139,20 +137,20 @@ class PhoneController extends AbstractController
 
     public function show(PhoneRepository $phoneRepository, $id)
     {
-       $cache = new FilesystemAdapter();
-        $phone = $cache->get('phone_show_' .$id, function (ItemInterface $item) use($phoneRepository, $id) {
+        $cache = new FilesystemAdapter();
+        $phone = $cache->get('phone_show_' . $id, function (ItemInterface $item) use ($phoneRepository, $id) {
             $item->expiresAfter(86400);
             $phone = $phoneRepository->find($id);
             return $phone;
         });
-   
-        if(!$phone){
+
+        if (!$phone) {
             throw new NotFoundHttpException();
         }
-    
-        $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show'])); 
-       
-        
+
+        $phoneJson = $this->serializer->serialize($phone, "json", SerializationContext::create()->setGroups(['show']));
+
+
         return  JsonResponse::fromJsonString($phoneJson);
     }
 }
